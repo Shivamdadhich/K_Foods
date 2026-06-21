@@ -109,7 +109,6 @@ function switchView(viewId) {
     };
     document.getElementById('current-view-title').innerText = titleMap[viewId] || 'QA & Operations Suite';
     
-    // Check if there is an existing log for this active date when switching views
     if (viewId !== 'dashboard' && viewId !== 'archives') {
         onGlobalDateChange();
     }
@@ -128,7 +127,6 @@ function onGlobalDateChange() {
     const activeViewId = activeSection.id.replace('-view', '');
     if (activeViewId === 'dashboard' || activeViewId === 'archives') return;
     
-    // Search if there is a logged entry for this exact date and type
     const existingLog = db.logs.find(l => l.date === workingDate && l.type === activeViewId);
     
     if (existingLog) {
@@ -312,7 +310,6 @@ function addReleaseRow() {
     const tbody = document.querySelector('#rel-table tbody');
     const tr = document.createElement('tr');
     tr.innerHTML = `
-        <td class="input-cell"><input type="date" class="rel-mfg-date"></td>
         <td class="input-cell"><input type="text" class="rel-pack-size" placeholder="1 Liter"></td>
         <td class="input-cell"><input type="text" class="rel-lot-size" placeholder="500 Cases"></td>
         <td class="input-cell"><input type="text" class="rel-app" value="Clear"></td>
@@ -329,8 +326,6 @@ function addReleaseRow() {
         </td>
     `;
     tbody.appendChild(tr);
-    const dateInput = tr.querySelector('.rel-mfg-date');
-    if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 }
 
 // 4. Light Inspection Record
@@ -430,7 +425,6 @@ function addDispatchRow() {
     const tbody = document.querySelector('#disp-table tbody');
     const tr = document.createElement('tr');
     tr.innerHTML = `
-        <td class="input-cell"><input type="date" class="disp-date"></td>
         <td class="input-cell"><input type="text" class="disp-name" placeholder="Distributor name"></td>
         <td class="input-cell"><input type="text" class="disp-loc" placeholder="City"></td>
         <td class="input-cell">
@@ -443,16 +437,11 @@ function addDispatchRow() {
             </select>
         </td>
         <td class="input-cell"><input type="number" class="disp-qty" placeholder="100"></td>
-        <td class="input-cell"><input type="date" class="disp-mfg"></td>
         <td class="input-cell"><input type="text" class="disp-batch" placeholder="Lot A"></td>
         <td class="input-cell"><input type="text" class="disp-veh" placeholder="MH-12-..."></td>
         <td class="input-cell"><input type="text" class="disp-by" placeholder="Operator"></td>
     `;
     tbody.appendChild(tr);
-
-    const today = new Date().toISOString().split('T')[0];
-    tr.querySelector('.disp-date').value = today;
-    tr.querySelector('.disp-mfg').value = today;
 }
 
 // 8. Personal Hygiene Checklist
@@ -510,18 +499,56 @@ function saveActiveReport(sheetType, status) {
     }
     else if (sheetType === 'release') {
         const target = document.getElementById('rel-to').value;
-        payload = { target };
+        const packSizes = Array.from(document.querySelectorAll('.rel-pack-size')).map(el => el.value);
+        const lotSizes = Array.from(document.querySelectorAll('.rel-lot-size')).map(el => el.value);
+        const apps = Array.from(document.querySelectorAll('.rel-app')).map(el => el.value);
+        const tastes = Array.from(document.querySelectorAll('.rel-taste')).map(el => el.value);
+        const phs = Array.from(document.querySelectorAll('.rel-ph')).map(el => el.value);
+        const tdss = Array.from(document.querySelectorAll('.rel-tds')).map(el => el.value);
+        const tbcs = Array.from(document.querySelectorAll('.rel-tbc')).map(el => el.value);
+        const yms = Array.from(document.querySelectorAll('.rel-ym')).map(el => el.value);
+        const statuses = Array.from(document.querySelectorAll('.rel-status')).map(el => el.value);
+        payload = { target, packSizes, lotSizes, apps, tastes, phs, tdss, tbcs, yms, statuses };
         summary = `Goods Release Auth (${status}) to ${target}`;
     }
     else if (sheetType === 'light') {
         const pack = document.getElementById('li-pack-size').value;
         const shift = document.getElementById('li-shift').value;
-        payload = { pack, shift };
+        const times = Array.from(document.querySelectorAll('.li-time')).map(el => el.value);
+        const foreigns = Array.from(document.querySelectorAll('.li-foreign')).map(el => el.value);
+        const crosses = Array.from(document.querySelectorAll('.li-cross')).map(el => el.value);
+        const looses = Array.from(document.querySelectorAll('.li-loose')).map(el => el.value);
+        const opens = Array.from(document.querySelectorAll('.li-open')).map(el => el.value);
+        const lows = Array.from(document.querySelectorAll('.li-low')).map(el => el.value);
+        const leaks = Array.from(document.querySelectorAll('.li-leak')).map(el => el.value);
+        const milks = Array.from(document.querySelectorAll('.li-milk')).map(el => el.value);
+        const inspectors = Array.from(document.querySelectorAll('.li-inspector')).map(el => el.value);
+        const remarks = Array.from(document.querySelectorAll('.li-remarks')).map(el => el.value);
+        payload = { pack, shift, times, foreigns, crosses, looses, opens, lows, leaks, milks, inspectors, remarks };
         summary = `Light Defect Inspection (${status}) [${shift}]`;
     }
     else if (sheetType === 'wtp') {
         const operator = document.getElementById('wtp-operator').value;
-        payload = { operator };
+        const chemist = document.getElementById('wtp-chemist').value;
+        const times = Array.from(document.querySelectorAll('.wtp-time')).map(el => el.value);
+        const srcPhs = Array.from(document.querySelectorAll('.wtp-src-ph')).map(el => el.value);
+        const srcTdss = Array.from(document.querySelectorAll('.wtp-src-tds')).map(el => el.value);
+        const psfs = Array.from(document.querySelectorAll('.wtp-psf')).map(el => el.value);
+        const acfIns = Array.from(document.querySelectorAll('.wtp-acf-in')).map(el => el.value);
+        const acfOuts = Array.from(document.querySelectorAll('.wtp-acf-out')).map(el => el.value);
+        const roFlows = Array.from(document.querySelectorAll('.wtp-ro-flow')).map(el => el.value);
+        const roPhs = Array.from(document.querySelectorAll('.wtp-ro-ph')).map(el => el.value);
+        const roTdss = Array.from(document.querySelectorAll('.wtp-ro-tds')).map(el => el.value);
+        const permTdss = Array.from(document.querySelectorAll('.wtp-perm-tds')).map(el => el.value);
+        const dosing = {
+            chem: document.getElementById('wtp-chem-1').value,
+            supplier: document.getElementById('wtp-supplier-1').value,
+            dates: document.getElementById('wtp-dates-1').value,
+            dosing: document.getElementById('wtp-dosing-1').value,
+            bwPsf: document.getElementById('wtp-bw-psf').value,
+            bwAcf: document.getElementById('wtp-bw-acf').value
+        };
+        payload = { operator, chemist, times, srcPhs, srcTdss, psfs, acfIns, acfOuts, roFlows, roPhs, roTdss, permTdss, dosing };
         summary = `WTP Operations Log (${status}) [${operator}]`;
     }
     else if (sheetType === 'minerals') {
@@ -543,25 +570,68 @@ function saveActiveReport(sheetType, status) {
         summary = `Bailley Mineral Record (${status}). Total: ${parseFloat(base1Cls) + parseFloat(base2Cls)} kg`;
     }
     else if (sheetType === 'dispatch') {
+        const names = Array.from(document.querySelectorAll('.disp-name')).map(el => el.value);
+        const locs = Array.from(document.querySelectorAll('.disp-loc')).map(el => el.value);
+        const skus = Array.from(document.querySelectorAll('.disp-sku')).map(el => el.value);
+        const qtys = Array.from(document.querySelectorAll('.disp-qty')).map(el => el.value);
+        const batches = Array.from(document.querySelectorAll('.disp-batch')).map(el => el.value);
+        const vehs = Array.from(document.querySelectorAll('.disp-veh')).map(el => el.value);
+        const bys = Array.from(document.querySelectorAll('.disp-by')).map(el => el.value);
+        payload = { names, locs, skus, qtys, batches, vehs, bys };
         summary = `Dispatch Log (${status})`;
     }
     else if (sheetType === 'vehicle') {
+        payload = {
+            vehNoA: document.getElementById('veh-no-a').value,
+            vehNoB: document.getElementById('veh-no-b').value,
+            vehNoC: document.getElementById('veh-no-c').value,
+            vehNoD: document.getElementById('veh-no-d').value,
+            destA: document.getElementById('veh-dest-a').value,
+            destB: document.getElementById('veh-dest-b').value,
+            destC: document.getElementById('veh-dest-c').value,
+            destD: document.getElementById('veh-dest-d').value,
+            cleanA: document.getElementById('veh-clean-a').value,
+            cleanB: document.getElementById('veh-clean-b').value,
+            cleanC: document.getElementById('veh-clean-c').value,
+            cleanD: document.getElementById('veh-clean-d').value,
+            odourA: document.getElementById('veh-odour-a').value,
+            odourB: document.getElementById('veh-odour-b').value,
+            odourC: document.getElementById('veh-odour-c').value,
+            odourD: document.getElementById('veh-odour-d').value,
+            tarpA: document.getElementById('veh-tarp-a').value,
+            tarpB: document.getElementById('veh-tarp-b').value,
+            tarpC: document.getElementById('veh-tarp-c').value,
+            tarpD: document.getElementById('veh-tarp-d').value,
+            remA: document.getElementById('veh-rem-a').value,
+            remB: document.getElementById('veh-rem-b').value,
+            remC: document.getElementById('veh-rem-c').value,
+            remD: document.getElementById('veh-rem-d').value
+        };
         summary = `Vehicle GMP Inspection (${status})`;
     }
     else if (sheetType === 'hygiene') {
+        const names = Array.from(document.querySelectorAll('.hyg-name')).map(el => el.value);
+        const supervisor = document.getElementById('hyg-supervisor').value;
+        const fevers = Array.from(document.querySelectorAll('.hyg-fever')).map(el => el.checked);
+        const noses = Array.from(document.querySelectorAll('.hyg-nose')).map(el => el.checked);
+        const masks = Array.from(document.querySelectorAll('.hyg-mask')).map(el => el.checked);
+        const caps = Array.from(document.querySelectorAll('.hyg-cap')).map(el => el.checked);
+        const trimmeds = Array.from(document.querySelectorAll('.hyg-trimmed')).map(el => el.checked);
+        const wounds = Array.from(document.querySelectorAll('.hyg-wounds')).map(el => el.checked);
+        const smokings = Array.from(document.querySelectorAll('.hyg-smoking')).map(el => el.checked);
+        const flowers = Array.from(document.querySelectorAll('.hyg-flowers')).map(el => el.checked);
+        const jewells = Array.from(document.querySelectorAll('.hyg-jewell')).map(el => el.checked);
+        payload = { supervisor, names, fevers, noses, masks, caps, trimmeds, wounds, smokings, flowers, jewells };
         summary = `Personal Hygiene Logs (${status})`;
     }
 
-    // Check if there is already a log for this exact date & type
     const existingLogIdx = db.logs.findIndex(l => l.date === date && l.type === sheetType);
 
     if (existingLogIdx !== -1) {
-        // Overwrite/Update existing day's log
         db.logs[existingLogIdx].status = status;
         db.logs[existingLogIdx].summary = summary;
         db.logs[existingLogIdx].payload = payload;
     } else {
-        // Create new day entry
         const newLog = {
             id: 'log_' + Date.now(),
             date: date,
@@ -616,6 +686,73 @@ function loadSavedLogIntoForm(log) {
             latestRow.querySelector('.fp-tds').value = p.tds[idx] || '';
         });
     }
+    else if (log.type === 'release') {
+        document.getElementById('rel-to').value = p.target || '';
+        const tbody = document.querySelector('#rel-table tbody');
+        tbody.innerHTML = '';
+        p.packSizes.forEach((ps, idx) => {
+            addReleaseRow();
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.rel-pack-size').value = ps || '';
+            latestRow.querySelector('.rel-lot-size').value = p.lotSizes[idx] || '';
+            latestRow.querySelector('.rel-app').value = p.apps[idx] || '';
+            latestRow.querySelector('.rel-taste').value = p.tastes[idx] || '';
+            latestRow.querySelector('.rel-ph').value = p.phs[idx] || '';
+            latestRow.querySelector('.rel-tds').value = p.tdss[idx] || '';
+            latestRow.querySelector('.rel-tbc').value = p.tbcs[idx] || '';
+            latestRow.querySelector('.rel-ym').value = p.yms[idx] || '';
+            latestRow.querySelector('.rel-status').value = p.statuses[idx] || 'RELEASED';
+        });
+    }
+    else if (log.type === 'light') {
+        document.getElementById('li-pack-size').value = p.pack || '';
+        document.getElementById('li-shift').value = p.shift || '';
+        const tbody = document.querySelector('#li-table tbody');
+        tbody.innerHTML = '';
+        p.times.forEach((t, idx) => {
+            addLightInspectionRow(t);
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.li-foreign').value = p.foreigns[idx] || 0;
+            latestRow.querySelector('.li-cross').value = p.crosses[idx] || 0;
+            latestRow.querySelector('.li-loose').value = p.looses[idx] || 0;
+            latestRow.querySelector('.li-open').value = p.opens[idx] || 0;
+            latestRow.querySelector('.li-low').value = p.lows[idx] || 0;
+            latestRow.querySelector('.li-leak').value = p.leaks[idx] || 0;
+            latestRow.querySelector('.li-milk').value = p.milks[idx] || 0;
+            latestRow.querySelector('.li-inspector').value = p.inspectors[idx] || '';
+            latestRow.querySelector('.li-remarks').value = p.remarks[idx] || '';
+        });
+    }
+    else if (log.type === 'wtp') {
+        document.getElementById('wtp-operator').value = p.operator || '';
+        document.getElementById('wtp-chemist').value = p.chemist || '';
+        const tbody = document.querySelector('#wtp-table-logs tbody');
+        tbody.innerHTML = '';
+        p.times.forEach((t, idx) => {
+            addWTPLogRow(t);
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.wtp-src-ph').value = p.srcPhs[idx] || '';
+            latestRow.querySelector('.wtp-src-tds').value = p.srcTdss[idx] || '';
+            latestRow.querySelector('.wtp-psf').value = p.psfs[idx] || '';
+            latestRow.querySelector('.wtp-acf-in').value = p.acfIns[idx] || '';
+            latestRow.querySelector('.wtp-acf-out').value = p.acfOuts[idx] || '';
+            latestRow.querySelector('.wtp-ro-flow').value = p.roFlows[idx] || '';
+            latestRow.querySelector('.wtp-ro-ph').value = p.roPhs[idx] || '';
+            latestRow.querySelector('.wtp-ro-tds').value = p.roTdss[idx] || '';
+            latestRow.querySelector('.wtp-perm-tds').value = p.permTdss[idx] || '';
+        });
+        if (p.dosing) {
+            document.getElementById('wtp-chem-1').value = p.dosing.chem || '';
+            document.getElementById('wtp-supplier-1').value = p.dosing.supplier || '';
+            document.getElementById('wtp-dates-1').value = p.dosing.dates || '';
+            document.getElementById('wtp-dosing-1').value = p.dosing.dosing || '';
+            document.getElementById('wtp-bw-psf').value = p.dosing.bwPsf || '';
+            document.getElementById('wtp-bw-acf').value = p.dosing.bwAcf || '';
+        }
+    }
     else if (log.type === 'minerals') {
         document.getElementById('min-op-1').value = p.op1 || 50;
         document.getElementById('min-sol-1').value = p.sol1 || 0;
@@ -628,6 +765,67 @@ function loadSavedLogIntoForm(log) {
         document.getElementById('min-wast-2').value = p.wast2 || 0;
         document.getElementById('min-rec-2').value = p.rec2 || 0;
         calcClosingStock();
+    }
+    else if (log.type === 'dispatch') {
+        const tbody = document.querySelector('#disp-table tbody');
+        tbody.innerHTML = '';
+        p.names.forEach((n, idx) => {
+            addDispatchRow();
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.disp-name').value = n || '';
+            latestRow.querySelector('.disp-loc').value = p.locs[idx] || '';
+            latestRow.querySelector('.disp-sku').value = p.skus[idx] || '500ml';
+            latestRow.querySelector('.disp-qty').value = p.qtys[idx] || '';
+            latestRow.querySelector('.disp-batch').value = p.batches[idx] || '';
+            latestRow.querySelector('.disp-veh').value = p.vehs[idx] || '';
+            latestRow.querySelector('.disp-by').value = p.bys[idx] || '';
+        });
+    }
+    else if (log.type === 'vehicle') {
+        document.getElementById('veh-no-a').value = p.vehNoA || '';
+        document.getElementById('veh-no-b').value = p.vehNoB || '';
+        document.getElementById('veh-no-c').value = p.vehNoC || '';
+        document.getElementById('veh-no-d').value = p.vehNoD || '';
+        document.getElementById('veh-dest-a').value = p.destA || '';
+        document.getElementById('veh-dest-b').value = p.destB || '';
+        document.getElementById('veh-dest-c').value = p.destC || '';
+        document.getElementById('veh-dest-d').value = p.destD || '';
+        document.getElementById('veh-clean-a').value = p.cleanA || 'Yes';
+        document.getElementById('veh-clean-b').value = p.cleanB || 'Yes';
+        document.getElementById('veh-clean-c').value = p.cleanC || 'Yes';
+        document.getElementById('veh-clean-d').value = p.cleanD || 'Yes';
+        document.getElementById('veh-odour-a').value = p.odourA || 'Yes';
+        document.getElementById('veh-odour-b').value = p.odourB || 'Yes';
+        document.getElementById('veh-odour-c').value = p.odourC || 'Yes';
+        document.getElementById('veh-odour-d').value = p.odourD || 'Yes';
+        document.getElementById('veh-tarp-a').value = p.tarpA || 'Yes';
+        document.getElementById('veh-tarp-b').value = p.tarpB || 'Yes';
+        document.getElementById('veh-tarp-c').value = p.tarpC || 'Yes';
+        document.getElementById('veh-tarp-d').value = p.tarpD || 'Yes';
+        document.getElementById('veh-rem-a').value = p.remA || '';
+        document.getElementById('veh-rem-b').value = p.remB || '';
+        document.getElementById('veh-rem-c').value = p.remC || '';
+        document.getElementById('veh-rem-d').value = p.remD || '';
+    }
+    else if (log.type === 'hygiene') {
+        document.getElementById('hyg-supervisor').value = p.supervisor || '';
+        const tbody = document.querySelector('#hyg-table tbody');
+        tbody.innerHTML = '';
+        p.names.forEach((name, idx) => {
+            addHygieneEmployeeRow(name, idx + 1);
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.hyg-fever').checked = p.fevers[idx] !== false;
+            latestRow.querySelector('.hyg-nose').checked = p.noses[idx] !== false;
+            latestRow.querySelector('.hyg-mask').checked = p.masks[idx] !== false;
+            latestRow.querySelector('.hyg-cap').checked = p.caps[idx] !== false;
+            latestRow.querySelector('.hyg-trimmed').checked = p.trimmeds[idx] !== false;
+            latestRow.querySelector('.hyg-wounds').checked = p.wounds[idx] !== false;
+            latestRow.querySelector('.hyg-smoking').checked = p.smokings[idx] !== false;
+            latestRow.querySelector('.hyg-flowers').checked = p.flowers[idx] !== false;
+            latestRow.querySelector('.hyg-jewell').checked = p.jewells[idx] !== false;
+        });
     }
 }
 
@@ -682,8 +880,14 @@ function renderArchives() {
 function printSavedLog(id) {
     const log = db.logs.find(l => l.id === id);
     if (!log) return;
-    alert(`Logged values: \n\n${JSON.stringify(log.payload, null, 2)}\n\n(Printing document formats)`);
-    window.print();
+    
+    // Switch to date context and print
+    document.getElementById('global-working-date').value = log.date;
+    loadSavedLogIntoForm(log);
+    switchView(log.type);
+    setTimeout(() => {
+        window.print();
+    }, 300);
 }
 
 function deleteSavedLog(id) {
@@ -695,7 +899,7 @@ function deleteSavedLog(id) {
     }
 }
 
-// Consolidated Exporter Logic
+// Consolidated Exporter Logic rendering actual PDF data
 function generateConsolidatedReport() {
     const start = document.getElementById('export-start-date').value;
     const end = document.getElementById('export-end-date').value;
@@ -706,57 +910,131 @@ function generateConsolidatedReport() {
         return;
     }
 
-    // Filter logs in range
     const logs = db.logs.filter(l => l.date >= start && l.date <= end && (type === 'all' || l.type === type));
 
     if (logs.length === 0) {
-        alert('No finalized or draft records found in this date range.');
+        alert('No quality records found in this date range.');
         return;
     }
 
     const printLayout = document.getElementById('consolidated-print-layout');
-    printLayout.innerHTML = `
-        <div style="font-family: Arial, sans-serif; padding: 2rem;">
+    let dynamicHtml = `
+        <div style="font-family: Arial, sans-serif; padding: 1.5rem;">
             <h1 style="text-align: center; color: #0f172a; margin-bottom: 0.25rem;">K FOODS N BEVERAGES, CHIMBALI</h1>
-            <h3 style="text-align: center; color: #475569; margin-top: 0; margin-bottom: 2rem;">Consolidated Quality Assurance Report</h3>
-            <p style="text-align: center; font-size: 0.9rem;"><strong>Reporting Period:</strong> ${start} to ${end}</p>
+            <h3 style="text-align: center; color: #475569; margin-top: 0; margin-bottom: 2rem;">Consolidated Quality Report Book</h3>
+            <p style="text-align: center; font-size: 0.9rem;"><strong>Reporting Range:</strong> ${start} to ${end}</p>
             <hr style="margin-bottom: 2rem; border: 1px solid #cbd5e1;">
-            
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem; font-size: 0.85rem;">
-                <thead>
-                    <tr style="background: #f1f5f9;">
-                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Date</th>
-                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Report Type</th>
-                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Summary Metrics</th>
-                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${logs.map(log => `
-                        <tr>
-                            <td style="border: 1px solid #cbd5e1; padding: 8px;"><strong>${log.date}</strong></td>
-                            <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: 600;">${log.type.toUpperCase()}</td>
-                            <td style="border: 1px solid #cbd5e1; padding: 8px;">${log.summary}</td>
-                            <td style="border: 1px solid #cbd5e1; padding: 8px; text-transform: uppercase;">${log.status || 'Final'}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-            <div style="margin-top: 5rem; display: flex; justify-content: space-between;">
-                <div>
-                    <p style="border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px;">Quality Inspector</p>
-                </div>
-                <div>
-                    <p style="border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px;">Plant Manager</p>
-                </div>
-            </div>
-        </div>
     `;
+
+    // Render detailed day-by-day sheets
+    logs.forEach(log => {
+        const p = log.payload;
+        dynamicHtml += `
+            <div style="page-break-after: always; margin-bottom: 3rem;">
+                <h3 style="background: #f1f5f9; padding: 0.5rem; border-left: 5px solid var(--primary);">
+                    Date: ${log.date} - ${log.type.toUpperCase()} (${log.status || 'Final'})
+                </h3>
+        `;
+
+        if (log.type === 'netcontent') {
+            dynamicHtml += `
+                <p><strong>SKU Size:</strong> ${p.sku}</p>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Valve No</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Goods Wt (g)</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Tare Wt (g)</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Net Wt (g)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${p.goods.map((g, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Valve ${idx + 1}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${g}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.tares[idx]}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${(g - p.tares[idx]).toFixed(1)}</td>
+                            </tr>
+                        `).slice(0, 22).join('')}
+                    </tbody>
+                </table>
+            `;
+        } 
+        else if (log.type === 'finishedproduct') {
+            dynamicHtml += `
+                <p><strong>Pack Size:</strong> ${p.packSize} | <strong>Line Chemist:</strong> ${p.chemist}</p>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Time</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Ozone Oz</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Ozone Prod</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">pH</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">TDS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${p.times.map((t, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${t}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ozoneOz[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ozoneProd[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ph[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.tds[idx] || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        else if (log.type === 'minerals') {
+            dynamicHtml += `
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Mineral</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Opening (kg)</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Prep Solution (kg)</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Production (kg)</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Wastage (kg)</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Receipts (kg)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Base 1</strong></td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.op1}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.sol1}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.prod1}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.wast1}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.rec1}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Base 2</strong></td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.op2}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.sol2}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.prod2}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.wast2}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.rec2}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        else {
+            dynamicHtml += `<p style="font-size: 0.85rem; color: #64748b;">${log.summary}</p>`;
+        }
+
+        dynamicHtml += `</div>`;
+    });
+
+    dynamicHtml += `</div>`;
+    printLayout.innerHTML = dynamicHtml;
 
     document.body.classList.add('print-range-active');
     window.print();
 
-    // Clear layout after printer loads
     setTimeout(() => {
         printLayout.innerHTML = '';
         document.body.classList.remove('print-range-active');
