@@ -9,7 +9,67 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="app-container">
+    <!-- WELCOME LANDING PAGE -->
+    <div id="landing-page" class="landing-container">
+        <header class="landing-header">
+            <div class="brand-section">
+                <div class="brand-logo" style="box-shadow: none; background: var(--primary);">KF</div>
+                <div class="brand-name">
+                    <h1 style="color: #0f172a; font-size: 1.25rem;">K Foods & Beverages</h1>
+                    <p style="color: #64748b; font-size: 0.75rem;">QA & Operations Portal</p>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="showLoginModal()">Login to Portal</button>
+        </header>
+
+        <main class="landing-hero">
+            <div class="hero-content">
+                <h2>Digitized Quality Assurance & Plant Operations</h2>
+                <p>Secure digital logging portal for K Foods N Beverages, Chimbali. Automate valve net weight checking, finished product parameter verification, inventory, and logistics GMP logs.</p>
+                
+                <div class="hero-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem; width: 100%;">
+                    <div class="feat-card" style="background: white; padding: 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+                        <span style="font-size: 2rem;">🧪</span>
+                        <h4 style="margin: 0.5rem 0;">Automated Specs</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Real-time validation warnings on pH, TDS, and weights.</p>
+                    </div>
+                    <div class="feat-card" style="background: white; padding: 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+                        <span style="font-size: 2rem;">📋</span>
+                        <h4 style="margin: 0.5rem 0;">9 Formats</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Fully compliant layouts for digital entry and records.</p>
+                    </div>
+                    <div class="feat-card" style="background: white; padding: 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);">
+                        <span style="font-size: 2rem;">🖨️</span>
+                        <h4 style="margin: 0.5rem 0;">Direct PDF Print</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Print-optimized styling to match physical registry sheets.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="login-card">
+            <h3>Staff Authentication</h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">Please log in using your authorized factory credentials.</p>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Operator Email / ID</label>
+                <input type="email" id="login-email" class="form-control" placeholder="chemist@kfoods.com" value="chemist@kfoods.com">
+            </div>
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>Passcode</label>
+                <input type="password" id="login-password" class="form-control" placeholder="••••••••" value="kfoods2026">
+            </div>
+            <p id="login-error" style="color: var(--danger); font-size: 0.8rem; margin-top: 0.5rem; display: none;">Invalid passcode. Please try again.</p>
+            <div class="btn-group" style="margin-top: 1.5rem;">
+                <button class="btn btn-secondary" onclick="hideLoginModal()">Close</button>
+                <button class="btn btn-primary" onclick="attemptLogin()">Authenticate</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" id="app-main-layout" style="display: none;">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="brand-section">
@@ -34,21 +94,21 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" />
                     </svg>
-                    <span>Net Content Analysis (QA/011)</span>
+                    <span>Net Content (QA/011)</span>
                 </a>
 
                 <a class="nav-item" onclick="switchView('finishedproduct')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
                     </svg>
-                    <span>Finished Product Online (QA/002)</span>
+                    <span>Online Analysis (QA/002)</span>
                 </a>
 
                 <a class="nav-item" onclick="switchView('release')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <span>Finished Goods Release (QA/021)</span>
+                    <span>Goods Release (QA/021)</span>
                 </a>
 
                 <a class="nav-item" onclick="switchView('light')">
@@ -71,7 +131,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                     </svg>
-                    <span>Bailley Minerals Record (QA/004)</span>
+                    <span>Minerals Record (QA/004)</span>
                 </a>
 
                 <div class="nav-category">Logistics & Hygiene</div>
@@ -80,21 +140,21 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124l-.847-13.56A1.125 1.125 0 0 0 19.985 3.5H16.5a1.5 1.5 0 0 0-1.5 1.5v3.375c0 .621.504 1.125 1.125 1.125h2.25m-3 10.5H8.25M16.5 4.5V2.25a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V15h3.75M9 15h3m-3-3h3m-3-3h3M3.75 6h11.25M3.75 9h11.25M3.75 12h11.25" />
                     </svg>
-                    <span>Finished Product Dispatch (QA/022)</span>
+                    <span>Product Dispatch (QA/022)</span>
                 </a>
 
                 <a class="nav-item" onclick="switchView('vehicle')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3 6-6m-8.25 1.5a1.5 1.5 0 0 0-3 0m3 0a1.5 1.5 0 0 1-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124l-.847-13.56A1.125 1.125 0 0 0 19.985 3.5H16.5a1.5 1.5 0 0 0-1.5 1.5v3.375c0 .621.504 1.125 1.125 1.125h2.25" />
                     </svg>
-                    <span>Vehicle GMP Inspection (QA/020)</span>
+                    <span>Vehicle GMP (QA/020)</span>
                 </a>
 
                 <a class="nav-item" onclick="switchView('hygiene')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                     </svg>
-                    <span>Personal Hygiene Checklist (QA/015)</span>
+                    <span>Personal Hygiene (QA/015)</span>
                 </a>
 
                 <div class="nav-category">Data & Records</div>
@@ -124,6 +184,7 @@
                         <span class="indicator"></span>
                         <span>System Online (Local DB)</span>
                     </div>
+                    <button class="btn btn-secondary" onclick="logout()" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; border-radius: var(--radius-sm);">Logout</button>
                 </div>
             </header>
 

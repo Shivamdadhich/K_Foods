@@ -23,6 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const mInput = document.getElementById('disp-month');
     if (mInput) mInput.value = currentMonth;
 
+    // Check Authentication state
+    if (sessionStorage.getItem('kf_logged_in') === 'true') {
+        document.getElementById('landing-page').style.display = 'none';
+        document.getElementById('app-main-layout').style.display = 'flex';
+    } else {
+        document.getElementById('landing-page').style.display = 'flex';
+        document.getElementById('app-main-layout').style.display = 'none';
+    }
+
     // Load initial form states
     initNetContentTable();
     initFinishedProductTable();
@@ -35,6 +44,35 @@ document.addEventListener('DOMContentLoaded', () => {
     updateDashboardStats();
     initChart();
 });
+
+// Authentication Flow
+function showLoginModal() {
+    document.getElementById('login-modal').classList.add('active');
+    document.getElementById('login-error').style.display = 'none';
+}
+
+function hideLoginModal() {
+    document.getElementById('login-modal').classList.remove('active');
+}
+
+function attemptLogin() {
+    const pass = document.getElementById('login-password').value;
+    if (pass === 'kfoods2026') {
+        sessionStorage.setItem('kf_logged_in', 'true');
+        hideLoginModal();
+        document.getElementById('landing-page').style.display = 'none';
+        document.getElementById('app-main-layout').style.display = 'flex';
+        updateDashboardStats();
+    } else {
+        document.getElementById('login-error').style.display = 'block';
+    }
+}
+
+function logout() {
+    sessionStorage.removeItem('kf_logged_in');
+    document.getElementById('landing-page').style.display = 'flex';
+    document.getElementById('app-main-layout').style.display = 'none';
+}
 
 // View Swapper
 function switchView(viewId) {
