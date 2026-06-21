@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date().toISOString().split('T')[0];
     document.querySelectorAll('input[type="date"]').forEach(inp => inp.value = today);
     
+    // Set global working date
+    const globalDate = document.getElementById('global-working-date');
+    if (globalDate) globalDate.value = today;
+
     // Set monthly input to current month
     const currentMonth = today.substring(0, 7);
     const mInput = document.getElementById('disp-month');
@@ -35,12 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Load initial form states
-    initNetContentTable();
-    initFinishedProductTable();
-    initReleaseTable();
-    initLightInspectionTable();
-    initWTPTable();
-    initHygieneTable();
+    resetAllForms();
     
     // Refresh dashboard stats and chart
     updateDashboardStats();
@@ -78,12 +77,6 @@ function logout() {
 
 // View Swapper
 function switchView(viewId) {
-    // Clear edit session if navigating to a clean form from menu
-    if (event && event.currentTarget && event.currentTarget.classList.contains('nav-item')) {
-        currentEditLogId = null;
-        resetAllForms();
-    }
-
     document.querySelectorAll('.view-section').forEach(view => {
         view.classList.remove('active');
     });
@@ -94,7 +87,6 @@ function switchView(viewId) {
     const targetView = document.getElementById(`${viewId}-view`);
     if (targetView) targetView.classList.add('active');
 
-    // Make corresponding sidebar menu item active
     const menuItems = document.querySelectorAll('.nav-item');
     menuItems.forEach(item => {
         if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(viewId)) {
@@ -117,32 +109,82 @@ function switchView(viewId) {
     };
     document.getElementById('current-view-title').innerText = titleMap[viewId] || 'QA & Operations Suite';
     
+    // Check if there is an existing log for this active date when switching views
+    if (viewId !== 'dashboard' && viewId !== 'archives') {
+        onGlobalDateChange();
+    }
+
     if (viewId === 'archives') {
         renderArchives();
     }
 }
 
+// Global Working Date Listener
+function onGlobalDateChange() {
+    const workingDate = document.getElementById('global-working-date').value;
+    const activeSection = document.querySelector('.view-section.active');
+    if (!activeSection) return;
+    
+    const activeViewId = activeSection.id.replace('-view', '');
+    if (activeViewId === 'dashboard' || activeViewId === 'archives') return;
+    
+    // Search if there is a logged entry for this exact date and type
+    const existingLog = db.logs.find(l => l.date === workingDate && l.type === activeViewId);
+    
+    if (existingLog) {
+        currentEditLogId = existingLog.id;
+        loadSavedLogIntoForm(existingLog);
+    } else {
+        currentEditLogId = null;
+        resetFormById(activeViewId);
+    }
+}
+
+function resetFormById(type) {
+    if (type === 'netcontent') {
+        initNetContentTable();
+    } else if (type === 'finishedproduct') {
+        initFinishedProductTable();
+    } else if (type === 'release') {
+        initReleaseTable();
+    } else if (type === 'light') {
+        initLightInspectionTable();
+    } else if (type === 'wtp') {
+        initWTPTable();
+    } else if (type === 'minerals') {
+        document.getElementById('min-op-1').value = 50;
+        document.getElementById('min-sol-1').value = 0;
+        document.getElementById('min-prod-1').value = 0;
+        document.getElementById('min-wast-1').value = 0;
+        document.getElementById('min-rec-1').value = 0;
+        document.getElementById('min-op-2').value = 40;
+        document.getElementById('min-sol-2').value = 0;
+        document.getElementById('min-prod-2').value = 0;
+        document.getElementById('min-wast-2').value = 0;
+        document.getElementById('min-rec-2').value = 0;
+        calcClosingStock();
+    } else if (type === 'dispatch') {
+        initDispatchTable();
+    } else if (type === 'vehicle') {
+        document.getElementById('veh-no-a').value = '';
+        document.getElementById('veh-dest-a').value = '';
+        document.getElementById('veh-no-b').value = '';
+        document.getElementById('veh-dest-b').value = '';
+    } else if (type === 'hygiene') {
+        initHygieneTable();
+    }
+}
+
 function resetAllForms() {
-    const today = new Date().toISOString().split('T')[0];
-    document.querySelectorAll('input[type="date"]').forEach(inp => inp.value = today);
-    initNetContentTable();
-    initFinishedProductTable();
-    initReleaseTable();
-    initLightInspectionTable();
-    initWTPTable();
-    initHygieneTable();
-    document.getElementById('min-op-1').value = 50;
-    document.getElementById('min-sol-1').value = 0;
-    document.getElementById('min-prod-1').value = 0;
-    document.getElementById('min-wast-1').value = 0;
-    document.getElementById('min-rec-1').value = 0;
-    document.getElementById('min-op-2').value = 40;
-    document.getElementById('min-sol-2').value = 0;
-    document.getElementById('min-prod-2').value = 0;
-    document.getElementById('min-wast-2').value = 0;
-    document.getElementById('min-rec-2').value = 0;
-    calcClosingStock();
-    initDispatchTable();
+    resetFormById('netcontent');
+    resetFormById('finishedproduct');
+    resetFormById('release');
+    resetFormById('light');
+    resetFormById('wtp');
+    resetFormById('minerals');
+    resetFormById('dispatch');
+    resetFormById('vehicle');
+    resetFormById('hygiene');
 }
 
 // 1. Net Content Analysis Setup
@@ -441,60 +483,52 @@ function addHygieneEmployeeRow(nameVal = '', index = '') {
     tbody.appendChild(tr);
 }
 
-// Universal Save Flow supporting Drafts
+// Universal Save Flow
 function saveActiveReport(sheetType, status) {
     let payload = {};
     let summary = '';
-    let date = new Date().toISOString().split('T')[0];
+    const date = document.getElementById('global-working-date').value;
 
     if (sheetType === 'netcontent') {
-        date = document.getElementById('nc-mfg-date').value;
         const sku = document.getElementById('nc-sku').value;
         const goods = Array.from(document.querySelectorAll('.nc-goods')).map(el => parseFloat(el.value) || 0);
         const tares = Array.from(document.querySelectorAll('.nc-tare')).map(el => parseFloat(el.value) || 0);
-        payload = { date, sku, goods, tares };
+        payload = { sku, goods, tares };
         summary = `${sku} Valve Check (${status}). Entries: ${goods.filter(g => g > 0).length}`;
     } 
     else if (sheetType === 'finishedproduct') {
-        date = document.getElementById('fp-date').value;
         const packSize = document.getElementById('fp-pack-size').value;
         const chemist = document.getElementById('fp-chemist').value;
-        
         const times = Array.from(document.querySelectorAll('.fp-time')).map(el => el.value);
         const ozoneOz = Array.from(document.querySelectorAll('.fp-ozone-oz')).map(el => el.value);
         const ozoneProd = Array.from(document.querySelectorAll('.fp-ozone-prod')).map(el => el.value);
         const ph = Array.from(document.querySelectorAll('.fp-ph')).map(el => el.value);
         const tds = Array.from(document.querySelectorAll('.fp-tds')).map(el => el.value);
         
-        payload = { date, packSize, chemist, times, ozoneOz, ozoneProd, ph, tds };
+        payload = { packSize, chemist, times, ozoneOz, ozoneProd, ph, tds };
         summary = `Online Product Analysis (${status}) by ${chemist || 'Chemist'}`;
     }
     else if (sheetType === 'release') {
-        date = document.getElementById('rel-date').value;
         const target = document.getElementById('rel-to').value;
-        payload = { date, target };
+        payload = { target };
         summary = `Goods Release Auth (${status}) to ${target}`;
     }
     else if (sheetType === 'light') {
-        date = document.getElementById('li-date').value;
         const pack = document.getElementById('li-pack-size').value;
         const shift = document.getElementById('li-shift').value;
-        payload = { date, pack, shift };
+        payload = { pack, shift };
         summary = `Light Defect Inspection (${status}) [${shift}]`;
     }
     else if (sheetType === 'wtp') {
-        date = document.getElementById('wtp-date').value;
         const operator = document.getElementById('wtp-operator').value;
-        payload = { date, operator };
+        payload = { operator };
         summary = `WTP Operations Log (${status}) [${operator}]`;
     }
     else if (sheetType === 'minerals') {
-        date = document.getElementById('min-date').value;
         calcClosingStock();
         const base1Cls = document.getElementById('min-cls-1').innerText;
         const base2Cls = document.getElementById('min-cls-2').innerText;
         payload = {
-            date,
             op1: document.getElementById('min-op-1').value,
             sol1: document.getElementById('min-sol-1').value,
             prod1: document.getElementById('min-prod-1').value,
@@ -509,29 +543,25 @@ function saveActiveReport(sheetType, status) {
         summary = `Bailley Mineral Record (${status}). Total: ${parseFloat(base1Cls) + parseFloat(base2Cls)} kg`;
     }
     else if (sheetType === 'dispatch') {
-        date = document.getElementById('disp-month').value + '-01';
         summary = `Dispatch Log (${status})`;
     }
     else if (sheetType === 'vehicle') {
-        date = document.getElementById('veh-date').value;
         summary = `Vehicle GMP Inspection (${status})`;
     }
     else if (sheetType === 'hygiene') {
-        date = document.getElementById('hyg-date').value;
         summary = `Personal Hygiene Logs (${status})`;
     }
 
-    if (currentEditLogId) {
-        // Update existing log
-        const idx = db.logs.findIndex(l => l.id === currentEditLogId);
-        if (idx !== -1) {
-            db.logs[idx].status = status;
-            db.logs[idx].summary = summary;
-            db.logs[idx].payload = payload;
-            db.logs[idx].date = date;
-        }
+    // Check if there is already a log for this exact date & type
+    const existingLogIdx = db.logs.findIndex(l => l.date === date && l.type === sheetType);
+
+    if (existingLogIdx !== -1) {
+        // Overwrite/Update existing day's log
+        db.logs[existingLogIdx].status = status;
+        db.logs[existingLogIdx].summary = summary;
+        db.logs[existingLogIdx].payload = payload;
     } else {
-        // Create new log
+        // Create new day entry
         const newLog = {
             id: 'log_' + Date.now(),
             date: date,
@@ -544,7 +574,6 @@ function saveActiveReport(sheetType, status) {
     }
 
     localStorage.setItem('kf_qa_logs', JSON.stringify(db.logs));
-    currentEditLogId = null;
     updateDashboardStats();
     
     alert(`Report saved as ${status.toUpperCase()}!`);
@@ -556,18 +585,10 @@ function saveActiveReport(sheetType, status) {
     switchView('dashboard');
 }
 
-// Resume editing saved draft payload
-function resumeEditingLog(id) {
-    const log = db.logs.find(l => l.id === id);
-    if (!log) return;
-    
-    currentEditLogId = log.id;
-    switchView(log.type);
-
-    // Populate data back into specific forms
+// Load draft data back into DOM
+function loadSavedLogIntoForm(log) {
     const p = log.payload;
     if (log.type === 'netcontent') {
-        document.getElementById('nc-mfg-date').value = p.date || '';
         document.getElementById('nc-sku').value = p.sku || '500ml';
         initNetContentTable();
         p.goods.forEach((g, idx) => {
@@ -580,7 +601,6 @@ function resumeEditingLog(id) {
         });
     } 
     else if (log.type === 'finishedproduct') {
-        document.getElementById('fp-date').value = p.date || '';
         document.getElementById('fp-pack-size').value = p.packSize || '';
         document.getElementById('fp-chemist').value = p.chemist || '';
         
@@ -597,19 +617,27 @@ function resumeEditingLog(id) {
         });
     }
     else if (log.type === 'minerals') {
-        document.getElementById('min-date').value = p.date || '';
-        document.getElementById('min-op-1').value = p.op1 || 0;
+        document.getElementById('min-op-1').value = p.op1 || 50;
         document.getElementById('min-sol-1').value = p.sol1 || 0;
         document.getElementById('min-prod-1').value = p.prod1 || 0;
         document.getElementById('min-wast-1').value = p.wast1 || 0;
         document.getElementById('min-rec-1').value = p.rec1 || 0;
-        document.getElementById('min-op-2').value = p.op2 || 0;
+        document.getElementById('min-op-2').value = p.op2 || 40;
         document.getElementById('min-sol-2').value = p.sol2 || 0;
         document.getElementById('min-prod-2').value = p.prod2 || 0;
         document.getElementById('min-wast-2').value = p.wast2 || 0;
         document.getElementById('min-rec-2').value = p.rec2 || 0;
         calcClosingStock();
     }
+}
+
+// Resume Editing Draft helper from UI
+function resumeEditingLog(id) {
+    const log = db.logs.find(l => l.id === id);
+    if (!log) return;
+    document.getElementById('global-working-date').value = log.date;
+    currentEditLogId = log.id;
+    switchView(log.type);
 }
 
 // Render Archives list
@@ -667,15 +695,79 @@ function deleteSavedLog(id) {
     }
 }
 
+// Consolidated Exporter Logic
+function generateConsolidatedReport() {
+    const start = document.getElementById('export-start-date').value;
+    const end = document.getElementById('export-end-date').value;
+    const type = document.getElementById('export-type').value;
+
+    if (!start || !end) {
+        alert('Please select both Start and End dates.');
+        return;
+    }
+
+    // Filter logs in range
+    const logs = db.logs.filter(l => l.date >= start && l.date <= end && (type === 'all' || l.type === type));
+
+    if (logs.length === 0) {
+        alert('No finalized or draft records found in this date range.');
+        return;
+    }
+
+    const printLayout = document.getElementById('consolidated-print-layout');
+    printLayout.innerHTML = `
+        <div style="font-family: Arial, sans-serif; padding: 2rem;">
+            <h1 style="text-align: center; color: #0f172a; margin-bottom: 0.25rem;">K FOODS N BEVERAGES, CHIMBALI</h1>
+            <h3 style="text-align: center; color: #475569; margin-top: 0; margin-bottom: 2rem;">Consolidated Quality Assurance Report</h3>
+            <p style="text-align: center; font-size: 0.9rem;"><strong>Reporting Period:</strong> ${start} to ${end}</p>
+            <hr style="margin-bottom: 2rem; border: 1px solid #cbd5e1;">
+            
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem; font-size: 0.85rem;">
+                <thead>
+                    <tr style="background: #f1f5f9;">
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Date</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Report Type</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Summary Metrics</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; text-align: left;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${logs.map(log => `
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 8px;"><strong>${log.date}</strong></td>
+                            <td style="border: 1px solid #cbd5e1; padding: 8px; font-weight: 600;">${log.type.toUpperCase()}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 8px;">${log.summary}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 8px; text-transform: uppercase;">${log.status || 'Final'}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            <div style="margin-top: 5rem; display: flex; justify-content: space-between;">
+                <div>
+                    <p style="border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px;">Quality Inspector</p>
+                </div>
+                <div>
+                    <p style="border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px;">Plant Manager</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.classList.add('print-range-active');
+    window.print();
+
+    // Clear layout after printer loads
+    setTimeout(() => {
+        printLayout.innerHTML = '';
+        document.body.classList.remove('print-range-active');
+    }, 1000);
+}
+
 // Update Dashboard Statistics
 function updateDashboardStats() {
     document.getElementById('stat-total-logs').innerText = db.logs.filter(l => l.status === 'Final').length;
-    
-    // Count drafts pending completion
-    const drafts = db.logs.filter(l => l.status === 'Draft');
-    document.getElementById('stat-pending-releases').innerText = drafts.length;
+    document.getElementById('stat-pending-releases').innerText = db.logs.filter(l => l.status === 'Draft').length;
 
-    // Get mineral stocks
     calcClosingStock();
     const base1Cls = document.getElementById('min-cls-1') ? (parseFloat(document.getElementById('min-cls-1').innerText) || 0) : 0;
     const base2Cls = document.getElementById('min-cls-2') ? (parseFloat(document.getElementById('min-cls-2').innerText) || 0) : 0;

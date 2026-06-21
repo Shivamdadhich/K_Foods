@@ -179,7 +179,12 @@
                 <div class="top-bar-title">
                     <h2 id="current-view-title">Dashboard Overview</h2>
                 </div>
-                <div class="top-bar-actions">
+                <div class="top-bar-actions" style="display: flex; gap: 1rem; align-items: center;">
+                    <!-- Global working date selector -->
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label style="font-size: 0.85rem; font-weight: 600; color: #475569; white-space: nowrap; margin-bottom: 0;">Working Date:</label>
+                        <input type="date" class="form-control" id="global-working-date" onchange="onGlobalDateChange()" style="width: 160px; padding: 0.4rem 0.6rem; font-size: 0.85rem;">
+                    </div>
                     <div class="system-status">
                         <span class="indicator"></span>
                         <span>System Online (Local DB)</span>
@@ -789,6 +794,33 @@
 
             <!-- HISTORY / SAVED RECORDS VIEW -->
             <section id="archives-view" class="view-section">
+                <!-- Export Range Panel -->
+                <div class="form-card" style="margin-bottom: 1.5rem;">
+                    <h3 class="section-title">Consolidated Report Exporter</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.25rem;">Select a date range to generate a combined, print-ready document of all quality records.</p>
+                    <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" class="form-control" id="export-start-date">
+                        </div>
+                        <div class="form-group">
+                            <label>End Date</label>
+                            <input type="date" class="form-control" id="export-end-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Report Type</label>
+                            <select class="form-control" id="export-type" style="width: 240px;">
+                                <option value="all">All Sheets Consolidated</option>
+                                <option value="netcontent">Net Content (QA/011) Only</option>
+                                <option value="finishedproduct">Finished Product (QA/002) Only</option>
+                                <option value="minerals">Bailley Minerals (QA/004) Only</option>
+                                <option value="wtp">WTP Operator (QA/003) Only</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateConsolidatedReport()" style="height: 38px;">Generate Consolidated PDF</button>
+                    </div>
+                </div>
+
                 <div class="archive-list-card">
                     <div class="archive-search-bar">
                         <input type="text" class="form-control" id="search-logs" placeholder="Search by Date, SKU, or Batch No..." oninput="renderArchives()">
@@ -826,6 +858,9 @@
             </section>
         </main>
     </div>
+
+    <!-- CONSOLIDATED EXPORT PRINT VIEW -->
+    <div id="consolidated-print-layout" class="print-only"></div>
 
     <!-- Core App Logic -->
     <script src="app.js"></script>

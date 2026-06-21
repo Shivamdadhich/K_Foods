@@ -711,4 +711,17 @@ body {
         border-right: none !important;
         border-radius: 0 !important;
     }
+    
+    #consolidated-print-layout {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    body.print-range-active .app-container {
+        display: none !important;
+    }
+}
+
+.print-only {
+    display: none;
 }
