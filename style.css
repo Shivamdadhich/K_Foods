@@ -397,6 +397,14 @@ body {
     border-radius: var(--radius-md);
 }
 
+#fp-table { min-width: 2000px; }
+#wtp-table-logs { min-width: 1300px; }
+#nc-table { min-width: 800px; }
+#rel-table { min-width: 1000px; }
+#li-table { min-width: 1000px; }
+#disp-table { min-width: 1000px; }
+#hyg-table { min-width: 1100px; }
+
 .qa-table {
     width: 100%;
     border-collapse: collapse;
