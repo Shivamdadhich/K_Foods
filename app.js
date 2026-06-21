@@ -144,6 +144,10 @@ function resetFormById(type) {
         initNetContentTable();
     } else if (type === 'finishedproduct') {
         initFinishedProductTable();
+        if (document.getElementById('fp-safety-tank')) document.getElementById('fp-safety-tank').checked = true;
+        if (document.getElementById('fp-safety-nozzles')) document.getElementById('fp-safety-nozzles').checked = true;
+        if (document.getElementById('fp-safety-hopper')) document.getElementById('fp-safety-hopper').checked = true;
+        if (document.getElementById('fp-safety-chute')) document.getElementById('fp-safety-chute').checked = true;
     } else if (type === 'release') {
         initReleaseTable();
     } else if (type === 'light') {
@@ -254,6 +258,39 @@ function initFinishedProductTable() {
     tbody.innerHTML = '';
     const defaultHours = ["08:00", "10:00", "12:00", "14:00", "16:00"];
     defaultHours.forEach(time => addFPHourlyRow(time));
+    initFPJarTable();
+}
+
+function initFPJarTable() {
+    const tbody = document.querySelector('#fp-jar-table tbody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        const defaultHours = ["08:00", "10:00", "12:00", "14:00", "16:00"];
+        defaultHours.forEach(time => addFPJarRow(time));
+    }
+}
+
+function addFPJarRow(timeVal = '') {
+    if (typeof timeVal !== 'string' || !timeVal.match(/^\d{2}:\d{2}$/)) {
+        timeVal = getCurrentTimeString();
+    }
+    const tbody = document.querySelector('#fp-jar-table tbody');
+    if (!tbody) return;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td class="checkbox-cell">
+            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+        </td>
+        <td class="input-cell"><input type="time" class="fp-jar-time" value="${timeVal}"></td>
+        <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
+        <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
+        <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
+        <td class="input-cell"><input type="text" class="fp-jar-prerinse" value="2 Jets / 2kg"></td>
+        <td class="input-cell"><input type="text" class="fp-jar-hotwater" value="55C / 0.5%"></td>
+        <td class="input-cell"><input type="text" class="fp-jar-prefinal" value="OK"></td>
+        <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
+    `;
+    tbody.appendChild(tr);
 }
 
 function addFPHourlyRow(timeVal = '') {
@@ -552,10 +589,26 @@ function saveActiveReport(sheetType, status) {
         const labelWrinkles = Array.from(document.querySelectorAll('.fp-wrinkle')).map(el => el.value);
         const glueStatuses = Array.from(document.querySelectorAll('.fp-glue')).map(el => el.value);
         
+        const jarTimes = Array.from(document.querySelectorAll('.fp-jar-time')).map(el => el.value);
+        const jarChems = Array.from(document.querySelectorAll('.fp-jar-chem')).map(el => el.value);
+        const jarCleanings = Array.from(document.querySelectorAll('.fp-jar-cleaning')).map(el => el.value);
+        const jarScrubs = Array.from(document.querySelectorAll('.fp-jar-scrub')).map(el => el.value);
+        const jarPreRinses = Array.from(document.querySelectorAll('.fp-jar-prerinse')).map(el => el.value);
+        const jarHotWaters = Array.from(document.querySelectorAll('.fp-jar-hotwater')).map(el => el.value);
+        const jarPreFinals = Array.from(document.querySelectorAll('.fp-jar-prefinal')).map(el => el.value);
+        const jarTotalTimes = Array.from(document.querySelectorAll('.fp-jar-totaltime')).map(el => el.value);
+
+        const safetyTank = document.getElementById('fp-safety-tank') ? document.getElementById('fp-safety-tank').checked : false;
+        const safetyNozzles = document.getElementById('fp-safety-nozzles') ? document.getElementById('fp-safety-nozzles').checked : false;
+        const safetyHopper = document.getElementById('fp-safety-hopper') ? document.getElementById('fp-safety-hopper').checked : false;
+        const safetyChute = document.getElementById('fp-safety-chute') ? document.getElementById('fp-safety-chute').checked : false;
+
         payload = { 
             packSize, chemist, times, ozoneOz, ozoneProd, appearances, odours, tastes, 
             ph, tds, hardness, calciums, magnesiums, colors, finprods, alkalinities, 
-            chlorides, sulphates, rfcs, netContents, codings, cableAligns, labelWrinkles, glueStatuses 
+            chlorides, sulphates, rfcs, netContents, codings, cableAligns, labelWrinkles, glueStatuses,
+            jarTimes, jarChems, jarCleanings, jarScrubs, jarPreRinses, jarHotWaters, jarPreFinals, jarTotalTimes,
+            safetyTank, safetyNozzles, safetyHopper, safetyChute
         };
         summary = `Online Product Analysis (${status}) by ${chemist || 'Chemist'}`;
     }
@@ -764,6 +817,34 @@ function loadSavedLogIntoForm(log) {
             latestRow.querySelector('.fp-wrinkle').value = p.labelWrinkles[idx] || 'No';
             latestRow.querySelector('.fp-glue').value = p.glueStatuses[idx] || 'OK';
         });
+
+        // Restore Jar washing logs
+        const jarTbody = document.querySelector('#fp-jar-table tbody');
+        if (jarTbody) {
+            jarTbody.innerHTML = '';
+            if (p.jarTimes) {
+                p.jarTimes.forEach((jt, idx) => {
+                    addFPJarRow(jt);
+                    const rows = jarTbody.querySelectorAll('tr');
+                    const latestRow = rows[rows.length - 1];
+                    latestRow.querySelector('.fp-jar-chem').value = p.jarChems[idx] || '';
+                    latestRow.querySelector('.fp-jar-cleaning').value = p.jarCleanings[idx] || '';
+                    latestRow.querySelector('.fp-jar-scrub').value = p.jarScrubs[idx] || '';
+                    latestRow.querySelector('.fp-jar-prerinse').value = p.jarPreRinses[idx] || '';
+                    latestRow.querySelector('.fp-jar-hotwater').value = p.jarHotWaters[idx] || '';
+                    latestRow.querySelector('.fp-jar-prefinal').value = p.jarPreFinals[idx] || '';
+                    latestRow.querySelector('.fp-jar-totaltime').value = p.jarTotalTimes[idx] || '';
+                });
+            } else {
+                initFPJarTable();
+            }
+        }
+
+        // Restore checkboxes
+        if (document.getElementById('fp-safety-tank')) document.getElementById('fp-safety-tank').checked = p.safetyTank !== false;
+        if (document.getElementById('fp-safety-nozzles')) document.getElementById('fp-safety-nozzles').checked = p.safetyNozzles !== false;
+        if (document.getElementById('fp-safety-hopper')) document.getElementById('fp-safety-hopper').checked = p.safetyHopper !== false;
+        if (document.getElementById('fp-safety-chute')) document.getElementById('fp-safety-chute').checked = p.safetyChute !== false;
     }
     else if (log.type === 'release') {
         document.getElementById('rel-to').value = p.target || '';
@@ -1042,7 +1123,8 @@ function generateConsolidatedReport() {
         else if (log.type === 'finishedproduct') {
             dynamicHtml += `
                 <p><strong>Pack Size:</strong> ${p.packSize} | <strong>Line Chemist:</strong> ${p.chemist}</p>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 0.5rem;">
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Online Quality Parameters</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 0.2rem; margin-bottom: 1rem;">
                     <thead>
                         <tr style="background: #f8fafc;">
                             <th style="border: 1px solid #cbd5e1; padding: 4px;">Time</th>
@@ -1072,6 +1154,54 @@ function generateConsolidatedReport() {
                         `).join('')}
                     </tbody>
                 </table>
+            `;
+
+            if (p.jarTimes) {
+                dynamicHtml += `
+                    <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Jar Washing & Sanitation Logs</h5>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th rowspan="2" style="border: 1px solid #cbd5e1; padding: 4px;">Time</th>
+                                <th colspan="3" style="border: 1px solid #cbd5e1; padding: 4px;">Jar External Washing</th>
+                                <th colspan="4" style="border: 1px solid #cbd5e1; padding: 4px;">Jar Internal Rinsing</th>
+                            </tr>
+                            <tr style="background: #f8fafc;">
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Chem</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Clean</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Scrub</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Pre-Rinse</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Hot Water</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Pre-Final</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Time (s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${p.jarTimes.map((jt, idx) => `
+                                <tr>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${jt}</td>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarChems[idx] || '-'}</td>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarCleanings[idx] || '-'}</td>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarScrubs[idx] || '-'}</td>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarPreRinses[idx] || '-'}</td>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarHotWaters[idx] || '-'}</td>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarPreFinals[idx] || '-'}</td>
+                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.jarTotalTimes[idx] || '-'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            dynamicHtml += `
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Start-up Safety Activities</h5>
+                <p style="font-size: 0.75rem; margin-top: 0.2rem;">
+                    Washer Tank: <strong>${p.safetyTank ? 'CLEANED' : 'NOT CLEANED'}</strong> | 
+                    Jet Nozzles: <strong>${p.safetyNozzles ? 'CLEANED' : 'NOT CLEANED'}</strong> | 
+                    Capper Hopper: <strong>${p.safetyHopper ? 'CLEANED' : 'NOT CLEANED'}</strong> | 
+                    Capper Chute: <strong>${p.safetyChute ? 'CLEANED' : 'NOT CLEANED'}</strong>
+                </p>
             `;
         }
         else if (log.type === 'minerals') {

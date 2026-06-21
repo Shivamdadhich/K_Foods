@@ -348,58 +348,39 @@
                     </div>
                     <button class="btn btn-secondary" onclick="addFPHourlyRow()">+ Add Hourly Entry</button>
 
-                    <h4 style="margin-top: 1.5rem;">Jar Washing and Sanitation Logs</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                        <div>
-                            <h5>Jar External Washing</h5>
-                            <table class="qa-table">
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Chemical (0.5-1%)</th>
-                                        <th>Cleaning</th>
-                                        <th>Scrubbing/Rinsing</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="input-cell"><input type="time" value="08:00"></td>
-                                        <td class="input-cell"><input type="text" value="SU 120"></td>
-                                        <td class="input-cell"><input type="text" value="OK"></td>
-                                        <td class="input-cell"><input type="text" value="Done"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div>
-                            <h5>Jar Internal Rinsing (Pressure &gt; 2kg/cm2, Time &gt; 20s)</h5>
-                            <table class="qa-table">
-                                <thead>
-                                    <tr>
-                                        <th>Pre Rinse</th>
-                                        <th>Hot Water (50-60°C)</th>
-                                        <th>Pre Final</th>
-                                        <th>Total Time (s)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="input-cell"><input type="text" placeholder="2 Jets / 2.2kg" value="2 Jets / 2kg"></td>
-                                        <td class="input-cell"><input type="text" placeholder="55°C / 0.8%" value="55C / 0.5%"></td>
-                                        <td class="input-cell"><input type="text" value="OK"></td>
-                                        <td class="input-cell"><input type="number" value="22"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <h4 style="margin-top: 1.5rem;">Jar Washing & Sanitation Logs (Startup to two hourly)</h4>
+                    <div class="table-container">
+                        <table class="qa-table" id="fp-jar-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Action</th>
+                                    <th rowspan="2">Time</th>
+                                    <th colspan="3">Jar External Washing</th>
+                                    <th colspan="4">Jar Internal Rinsing (Pressure > 2kg/cm², Time > 20s)</th>
+                                </tr>
+                                <tr>
+                                    <th>Chemical (0.5-1%)</th>
+                                    <th>Physical Cleaning</th>
+                                    <th>Scrubbing/Rinsing</th>
+                                    <th>Pre Rinse</th>
+                                    <th>Hot Water (50-60°C)</th>
+                                    <th>Pre Final</th>
+                                    <th>Total Time (s)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
                     </div>
+                    <button class="btn btn-secondary" onclick="addFPJarRow()">+ Add Jar Wash Entry</button>
 
                     <h4 style="margin-top: 1.5rem;">Start-up & Changeover Safety Activities</h4>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <label class="checkbox-cell"><input type="checkbox" checked> Jar washer tank inside cleaning</label>
-                        <label class="checkbox-cell"><input type="checkbox" checked> Jet nozzles cleaning</label>
-                        <label class="checkbox-cell"><input type="checkbox" checked> Capper hopper cleaning (70% Alcohol)</label>
-                        <label class="checkbox-cell"><input type="checkbox" checked> Capper chute cleaning (70% IPA)</label>
+                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-tank" checked> Jar washer tank inside cleaning</label>
+                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-nozzles" checked> Jet nozzles cleaning</label>
+                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-hopper" checked> Capper hopper cleaning (70% Alcohol)</label>
+                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-chute" checked> Capper chute cleaning (70% IPA)</label>
                     </div>
 
                     <div class="btn-group">
