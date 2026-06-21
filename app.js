@@ -14,22 +14,26 @@ const SKU_SPECS = {
     '20L': { target: 20000, tolerance: 100 }
 };
 
+// Time helper
+function getCurrentTimeString() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    return `${hh}:${mm}`;
+}
+
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
-    // Set all date inputs to today
     const today = new Date().toISOString().split('T')[0];
     document.querySelectorAll('input[type="date"]').forEach(inp => inp.value = today);
     
-    // Set global working date
     const globalDate = document.getElementById('global-working-date');
     if (globalDate) globalDate.value = today;
 
-    // Set monthly input to current month
     const currentMonth = today.substring(0, 7);
     const mInput = document.getElementById('disp-month');
     if (mInput) mInput.value = currentMonth;
 
-    // Check Authentication state
     if (sessionStorage.getItem('kf_logged_in') === 'true') {
         document.getElementById('landing-page').style.display = 'none';
         document.getElementById('app-main-layout').style.display = 'flex';
@@ -38,10 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('app-main-layout').style.display = 'none';
     }
 
-    // Load initial form states
     resetAllForms();
-    
-    // Refresh dashboard stats and chart
     updateDashboardStats();
     initChart();
 });
@@ -256,9 +257,15 @@ function initFinishedProductTable() {
 }
 
 function addFPHourlyRow(timeVal = '') {
+    if (typeof timeVal !== 'string' || !timeVal.match(/^\d{2}:\d{2}$/)) {
+        timeVal = getCurrentTimeString();
+    }
     const tbody = document.querySelector('#fp-table tbody');
     const tr = document.createElement('tr');
     tr.innerHTML = `
+        <td class="checkbox-cell">
+            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+        </td>
         <td class="input-cell"><input type="time" class="fp-time" value="${timeVal}"></td>
         <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
         <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
@@ -323,6 +330,9 @@ function addReleaseRow() {
     const tbody = document.querySelector('#rel-table tbody');
     const tr = document.createElement('tr');
     tr.innerHTML = `
+        <td class="checkbox-cell">
+            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+        </td>
         <td class="input-cell"><input type="text" class="rel-pack-size" placeholder="1 Liter"></td>
         <td class="input-cell"><input type="text" class="rel-lot-size" placeholder="500 Cases"></td>
         <td class="input-cell"><input type="text" class="rel-app" value="Clear"></td>
@@ -350,9 +360,15 @@ function initLightInspectionTable() {
 }
 
 function addLightInspectionRow(timeVal = '') {
+    if (typeof timeVal !== 'string' || !timeVal.match(/^\d{2}:\d{2}$/)) {
+        timeVal = getCurrentTimeString();
+    }
     const tbody = document.querySelector('#li-table tbody');
     const tr = document.createElement('tr');
     tr.innerHTML = `
+        <td class="checkbox-cell">
+            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+        </td>
         <td class="input-cell"><input type="time" class="li-time" value="${timeVal}"></td>
         <td class="input-cell"><input type="number" class="li-foreign" value="0"></td>
         <td class="input-cell"><input type="number" class="li-cross" value="0"></td>
@@ -376,9 +392,15 @@ function initWTPTable() {
 }
 
 function addWTPLogRow(timeVal = '') {
+    if (typeof timeVal !== 'string' || !timeVal.match(/^\d{2}:\d{2}$/)) {
+        timeVal = getCurrentTimeString();
+    }
     const tbody = document.querySelector('#wtp-table-logs tbody');
     const tr = document.createElement('tr');
     tr.innerHTML = `
+        <td class="checkbox-cell">
+            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+        </td>
         <td class="input-cell"><input type="time" class="wtp-time" value="${timeVal}"></td>
         <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
         <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
@@ -438,6 +460,9 @@ function addDispatchRow() {
     const tbody = document.querySelector('#disp-table tbody');
     const tr = document.createElement('tr');
     tr.innerHTML = `
+        <td class="checkbox-cell">
+            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+        </td>
         <td class="input-cell"><input type="text" class="disp-name" placeholder="Distributor name"></td>
         <td class="input-cell"><input type="text" class="disp-loc" placeholder="City"></td>
         <td class="input-cell">
@@ -470,6 +495,9 @@ function addHygieneEmployeeRow(nameVal = '', index = '') {
     const tr = document.createElement('tr');
     const idx = index || (tbody.children.length + 1);
     tr.innerHTML = `
+        <td class="checkbox-cell">
+            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
+        </td>
         <td>${idx}</td>
         <td class="input-cell"><input type="text" class="hyg-name" value="${nameVal}" placeholder="Employee Name"></td>
         <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
@@ -504,11 +532,9 @@ function saveActiveReport(sheetType, status) {
         const times = Array.from(document.querySelectorAll('.fp-time')).map(el => el.value);
         const ozoneOz = Array.from(document.querySelectorAll('.fp-ozone-oz')).map(el => el.value);
         const ozoneProd = Array.from(document.querySelectorAll('.fp-ozone-prod')).map(el => el.value);
-        
         const appearances = Array.from(document.querySelectorAll('.fp-appearance')).map(el => el.value);
         const odours = Array.from(document.querySelectorAll('.fp-odour')).map(el => el.value);
         const tastes = Array.from(document.querySelectorAll('.fp-taste')).map(el => el.value);
-        
         const ph = Array.from(document.querySelectorAll('.fp-ph')).map(el => el.value);
         const tds = Array.from(document.querySelectorAll('.fp-tds')).map(el => el.value);
         const hardness = Array.from(document.querySelectorAll('.fp-hardness')).map(el => el.value);
@@ -520,7 +546,6 @@ function saveActiveReport(sheetType, status) {
         const chlorides = Array.from(document.querySelectorAll('.fp-chloride')).map(el => el.value);
         const sulphates = Array.from(document.querySelectorAll('.fp-sulphate')).map(el => el.value);
         const rfcs = Array.from(document.querySelectorAll('.fp-rfc')).map(el => el.value);
-        
         const netContents = Array.from(document.querySelectorAll('.fp-net-content')).map(el => el.value);
         const codings = Array.from(document.querySelectorAll('.fp-coding')).map(el => el.value);
         const cableAligns = Array.from(document.querySelectorAll('.fp-cable')).map(el => el.value);
@@ -808,6 +833,7 @@ function loadSavedLogIntoForm(log) {
         }
     }
     else if (log.type === 'minerals') {
+        document.getElementById('min-date').value = p.date || '';
         document.getElementById('min-op-1').value = p.op1 || 50;
         document.getElementById('min-sol-1').value = p.sol1 || 0;
         document.getElementById('min-prod-1').value = p.prod1 || 0;
