@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K Foods & Beverages - QA & Operations Suite</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- SVG Icon Helpers / ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand-section">
+                <div class="brand-logo">KF</div>
+                <div class="brand-name">
+                    <h1>K Foods & Beverages</h1>
+                    <p>QA & Operations Portal</p>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a class="nav-item active" onclick="switchView('dashboard')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+
+                <div class="nav-category">Quality Control</div>
+
+                <a class="nav-item" onclick="switchView('netcontent')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m9-9H3" />
+                    </svg>
+                    <span>Net Content Analysis (QA/011)</span>
+                </a>
+
+                <a class="nav-item" onclick="switchView('finishedproduct')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z" />
+                    </svg>
+                    <span>Finished Product Online (QA/002)</span>
+                </a>
+
+                <a class="nav-item" onclick="switchView('release')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    <span>Finished Goods Release (QA/021)</span>
+                </a>
+
+                <a class="nav-item" onclick="switchView('light')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 0 0 .495-7.467 5.99 5.99 0 0 0-1.925 3.546 5.974 5.974 0 0 1-2.133-1A3.75 3.75 0 0 0 12 18Z" />
+                    </svg>
+                    <span>Light Inspection (QA/018)</span>
+                </a>
+
+                <div class="nav-category">Operations & Water</div>
+
+                <a class="nav-item" onclick="switchView('wtp')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z" />
+                    </svg>
+                    <span>WTP Operator Log (QA/003)</span>
+                </a>
+
+                <a class="nav-item" onclick="switchView('minerals')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                    <span>Bailley Minerals Record (QA/004)</span>
+                </a>
+
+                <div class="nav-category">Logistics & Hygiene</div>
+
+                <a class="nav-item" onclick="switchView('dispatch')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124l-.847-13.56A1.125 1.125 0 0 0 19.985 3.5H16.5a1.5 1.5 0 0 0-1.5 1.5v3.375c0 .621.504 1.125 1.125 1.125h2.25m-3 10.5H8.25M16.5 4.5V2.25a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V15h3.75M9 15h3m-3-3h3m-3-3h3M3.75 6h11.25M3.75 9h11.25M3.75 12h11.25" />
+                    </svg>
+                    <span>Finished Product Dispatch (QA/022)</span>
+                </a>
+
+                <a class="nav-item" onclick="switchView('vehicle')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l3 3 6-6m-8.25 1.5a1.5 1.5 0 0 0-3 0m3 0a1.5 1.5 0 0 1-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124l-.847-13.56A1.125 1.125 0 0 0 19.985 3.5H16.5a1.5 1.5 0 0 0-1.5 1.5v3.375c0 .621.504 1.125 1.125 1.125h2.25" />
+                    </svg>
+                    <span>Vehicle GMP Inspection (QA/020)</span>
+                </a>
+
+                <a class="nav-item" onclick="switchView('hygiene')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+                    <span>Personal Hygiene Checklist (QA/015)</span>
+                </a>
+
+                <div class="nav-category">Data & Records</div>
+
+                <a class="nav-item" onclick="switchView('archives')">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                    <span>Saved Records / History</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p>&copy; 2026 K Foods & Beverages</p>
+                <p>Chimbali, Pune</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-title">
+                    <h2 id="current-view-title">Dashboard Overview</h2>
+                </div>
+                <div class="top-bar-actions">
+                    <div class="system-status">
+                        <span class="indicator"></span>
+                        <span>System Online (Local DB)</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD VIEW -->
+            <section id="dashboard-view" class="view-section active">
+                <div class="dashboard-grid">
+                    <div class="stats-card">
+                        <div class="stats-info">
+                            <h3>Total Logs Submitted</h3>
+                            <p id="stat-total-logs">0</p>
+                        </div>
+                        <div class="stats-icon blue">📜</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-info">
+                            <h3>Unreleased Batches</h3>
+                            <p id="stat-pending-releases">0</p>
+                        </div>
+                        <div class="stats-icon yellow">📦</div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-info">
+                            <h3>Minerals Closing Stock</h3>
+                            <p id="stat-minerals-stock">0 kg</p>
+                        </div>
+                        <div class="stats-icon green">🧪</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-actions">
+                    <h3 class="section-title">Quick Action - New Entry</h3>
+                    <div class="grid-actions">
+                        <div class="action-btn-card" onclick="switchView('netcontent')">
+                            <span>Net Content (QA/011)</span>
+                            <small>Fill Valve weights analysis</small>
+                        </div>
+                        <div class="action-btn-card" onclick="switchView('finishedproduct')">
+                            <span>Online Analysis (QA/002)</span>
+                            <small>Hourly Finished Product parameters</small>
+                        </div>
+                        <div class="action-btn-card" onclick="switchView('release')">
+                            <span>Goods Release (QA/021)</span>
+                            <small>Authorize batch release</small>
+                        </div>
+                        <div class="action-btn-card" onclick="switchView('wtp')">
+                            <span>WTP Operator (QA/003)</span>
+                            <small>Water Treatment & RO metrics</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <h3 class="section-title">Quality Assurance Trends (TDS & pH)</h3>
+                    <canvas id="qaTrendsChart" style="max-height: 300px;"></canvas>
+                </div>
+            </section>
+
+            <!-- NET CONTENT ANALYSIS (QA/011) -->
+            <section id="netcontent-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Mfg Date</label>
+                            <input type="date" class="form-control" id="nc-mfg-date">
+                        </div>
+                        <div class="form-group">
+                            <label>SKU (Product Size)</label>
+                            <select class="form-control" id="nc-sku" onchange="updateNCSkuSpec()">
+                                <option value="200ml">200 ml</option>
+                                <option value="500ml" selected>500 ml</option>
+                                <option value="1L">1.0 Liter</option>
+                                <option value="2L">2.0 Liter</option>
+                                <option value="20L">20.0 Liter (Jar)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Format Number</label>
+                            <input type="text" class="form-control" value="Format No.KFB/QA/011" disabled>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="nc-table">
+                            <thead>
+                                <tr>
+                                    <th>Filling Valve No.</th>
+                                    <th>Goods Weight (gm)</th>
+                                    <th>Tare Weight (gm)</th>
+                                    <th>Net Content Wt. (gm)</th>
+                                    <th>Net Content (ml)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS populated 22 valves -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveNetContentReport()">Save & Print Report</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FINISHED PRODUCT ONLINE ANALYSIS (QA/002) -->
+            <section id="finishedproduct-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="fp-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Pack Size</label>
+                            <input type="text" class="form-control" id="fp-pack-size" placeholder="e.g. 500ml">
+                        </div>
+                        <div class="form-group">
+                            <label>Line Chemist</label>
+                            <input type="text" class="form-control" id="fp-chemist">
+                        </div>
+                        <div class="form-group">
+                            <label>Format Number</label>
+                            <input type="text" class="form-control" value="Format No.KFB/QA/002" disabled>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="fp-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Ozone Ozonator (0.4-0.6ppm)</th>
+                                    <th>Ozone Product (0.2-0.4ppm)</th>
+                                    <th>Appearance (Clear)</th>
+                                    <th>Odour (Agreeable)</th>
+                                    <th>Taste (Agreeable)</th>
+                                    <th>pH (6.0-8.5)</th>
+                                    <th>TDS (100-125ppm)</th>
+                                    <th>Hardness (Min 11ppm)</th>
+                                    <th>Calcium (Min 6ppm)</th>
+                                    <th>Net Content</th>
+                                    <th>Date Coding</th>
+                                    <th>Labeling/Glue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS inserts row additions dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addFPHourlyRow()">+ Add Hourly Entry</button>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveFinishedProductReport()">Save & Print</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FINISHED GOODS RELEASE REPORT (QA/021) -->
+            <section id="release-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="rel-date">
+                        </div>
+                        <div class="form-group">
+                            <label>To</label>
+                            <input type="text" class="form-control" id="rel-to" value="The Warehouse Incharge">
+                        </div>
+                        <div class="form-group">
+                            <label>Format Number</label>
+                            <input type="text" class="form-control" value="Format No.KFB/QA/021" disabled>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="rel-table">
+                            <thead>
+                                <tr>
+                                    <th>Mfg Date</th>
+                                    <th>Pack Size</th>
+                                    <th>Lot Size</th>
+                                    <th>Appearance</th>
+                                    <th>Taste</th>
+                                    <th>pH</th>
+                                    <th>TDS (ppm)</th>
+                                    <th>TBC (cfu/ml)</th>
+                                    <th>Y & M</th>
+                                    <th>Release Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS dynamically inserts rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addReleaseRow()">+ Add Batch Row</button>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveReleaseReport()">Save & Release</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LIGHT INSPECTION RECORD (QA/018) -->
+            <section id="light-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="li-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Pack Size</label>
+                            <input type="text" class="form-control" id="li-pack-size">
+                        </div>
+                        <div class="form-group">
+                            <label>Line & Shift</label>
+                            <input type="text" class="form-control" id="li-shift" placeholder="e.g. Line 1, Shift A">
+                        </div>
+                        <div class="form-group">
+                            <label>Inspector Rotation Every 30 Min</label>
+                            <select class="form-control" id="li-rotation">
+                                <option value="Yes">Followed</option>
+                                <option value="No">Not Followed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="li-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Foreign Particles</th>
+                                    <th>Cross Cap</th>
+                                    <th>Loose Cap</th>
+                                    <th>Open Bottle</th>
+                                    <th>Low Fills</th>
+                                    <th>Cap/Bottle Leakages</th>
+                                    <th>Milk/Pearl White</th>
+                                    <th>Inspector Name</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS inserts inspection rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addLightInspectionRow()">+ Add Log Row</button>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveLightReport()">Save & Print</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- WTP OPERATOR LOG (QA/003) -->
+            <section id="wtp-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="wtp-date">
+                        </div>
+                        <div class="form-group">
+                            <label>WTP Operator</label>
+                            <input type="text" class="form-control" id="wtp-operator">
+                        </div>
+                        <div class="form-group">
+                            <label>Line Chemist</label>
+                            <input type="text" class="form-control" id="wtp-chemist">
+                        </div>
+                    </div>
+
+                    <h4>Source Water & Filters Outlet Logs</h4>
+                    <div class="table-container">
+                        <table class="qa-table" id="wtp-table-logs">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Source pH (6.5-8.5)</th>
+                                    <th>Source TDS</th>
+                                    <th>PSF Outlet Turbidity (&lt;1 NTU)</th>
+                                    <th>ACF Inlet (REF 2PPM)</th>
+                                    <th>ACF Outlet (TC NIL)</th>
+                                    <th>RO Feed Flow (KLPH)</th>
+                                    <th>RO Feed pH</th>
+                                    <th>RO Feed TDS</th>
+                                    <th>RO Permeate TDS (&lt;20 ppm)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS populated -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addWTPLogRow()">+ Add Hourly WTP Log</button>
+
+                    <h4 style="margin-top: 1.5rem;">Back Wash & Chemical Dosing Activities</h4>
+                    <div class="table-container">
+                        <table class="qa-table" id="wtp-dosing-table">
+                            <thead>
+                                <tr>
+                                    <th>Chemical Used</th>
+                                    <th>Supplier Name</th>
+                                    <th>Mfg/Exp Date</th>
+                                    <th>Dosing Rate</th>
+                                    <th>Backwash PSF (From/To)</th>
+                                    <th>Backwash ACF (From/To)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="input-cell"><input type="text" value="Chlorine" id="wtp-chem-1"></td>
+                                    <td class="input-cell"><input type="text" id="wtp-supplier-1"></td>
+                                    <td class="input-cell"><input type="text" placeholder="MM/YY" id="wtp-dates-1"></td>
+                                    <td class="input-cell"><input type="text" placeholder="e.g. 5 ml/hr" id="wtp-dosing-1"></td>
+                                    <td class="input-cell"><input type="text" placeholder="10:00 - 10:30" id="wtp-bw-psf"></td>
+                                    <td class="input-cell"><input type="text" placeholder="10:30 - 11:00" id="wtp-bw-acf"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveWTPReport()">Save & Print</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BAILLEY MINERALS RECORD (QA/004) -->
+            <section id="minerals-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="min-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Format Number</label>
+                            <input type="text" class="form-control" value="Format No.KFB/QA/004" disabled>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="minerals-table">
+                            <thead>
+                                <tr>
+                                    <th>Mineral Type</th>
+                                    <th>Opening Stock (Kg)</th>
+                                    <th>Batch/MFD</th>
+                                    <th>Qty Used Solution (Kg)</th>
+                                    <th>Qty Used Production (Kg)</th>
+                                    <th>Wastage (Kg)</th>
+                                    <th>Fresh Receipt (Kg)</th>
+                                    <th>Closing Stock (Kg)</th>
+                                    <th>Operator Sign</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Base 1 (Magnesium Sulfate)</strong></td>
+                                    <td class="input-cell"><input type="number" id="min-op-1" value="50" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="text" id="min-batch-1"></td>
+                                    <td class="input-cell"><input type="number" id="min-sol-1" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="number" id="min-prod-1" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="number" id="min-wast-1" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="number" id="min-rec-1" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="calc-cell" id="min-cls-1">50.00</td>
+                                    <td class="input-cell"><input type="text" id="min-sign-1"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Base 2 (Potassium Bicarbonate)</strong></td>
+                                    <td class="input-cell"><input type="number" id="min-op-2" value="40" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="text" id="min-batch-2"></td>
+                                    <td class="input-cell"><input type="number" id="min-sol-2" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="number" id="min-prod-2" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="number" id="min-wast-2" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="input-cell"><input type="number" id="min-rec-2" value="0" oninput="calcClosingStock()"></td>
+                                    <td class="calc-cell" id="min-cls-2">40.00</td>
+                                    <td class="input-cell"><input type="text" id="min-sign-2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveMineralsReport()">Save Stock Log</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FINISHED PRODUCT DISPATCH (QA/022) -->
+            <section id="dispatch-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Month / Period</label>
+                            <input type="month" class="form-control" id="disp-month">
+                        </div>
+                        <div class="form-group">
+                            <label>Format Number</label>
+                            <input type="text" class="form-control" value="Format No.KFB/QA/022" disabled>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="disp-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Distributor Name</th>
+                                    <th>Location</th>
+                                    <th>SKU</th>
+                                    <th>Qty (Cases)</th>
+                                    <th>Mfg Date</th>
+                                    <th>Batch/Lot No.</th>
+                                    <th>Vehicle No.</th>
+                                    <th>Dispatched By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addDispatchRow()">+ Add Dispatch Entry</button>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveDispatchReport()">Save Dispatch Log</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VEHICLE GMP INSPECTION (QA/020) -->
+            <section id="vehicle-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Inspection Date</label>
+                            <input type="date" class="form-control" id="veh-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Format Number</label>
+                            <input type="text" class="form-control" value="Format No.KFB/QA/020" disabled>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="veh-table">
+                            <thead>
+                                <tr>
+                                    <th>Checklist Parameter</th>
+                                    <th>Vehicle A</th>
+                                    <th>Vehicle B</th>
+                                    <th>Vehicle C</th>
+                                    <th>Vehicle D</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Vehicle No.</strong></td>
+                                    <td class="input-cell"><input type="text" id="veh-no-a" placeholder="MH-12-XX-XXXX"></td>
+                                    <td class="input-cell"><input type="text" id="veh-no-b"></td>
+                                    <td class="input-cell"><input type="text" id="veh-no-c"></td>
+                                    <td class="input-cell"><input type="text" id="veh-no-d"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Destination</strong></td>
+                                    <td class="input-cell"><input type="text" id="veh-dest-a"></td>
+                                    <td class="input-cell"><input type="text" id="veh-dest-b"></td>
+                                    <td class="input-cell"><input type="text" id="veh-dest-c"></td>
+                                    <td class="input-cell"><input type="text" id="veh-dest-d"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dry, Clean & Hygienic?</strong></td>
+                                    <td class="input-cell">
+                                        <select id="veh-clean-a"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-clean-b"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-clean-c"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-clean-d"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Free from obnoxious odour?</strong></td>
+                                    <td class="input-cell">
+                                        <select id="veh-odour-a"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-odour-b"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-odour-c"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-odour-d"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Has Tarpaulin roof cover?</strong></td>
+                                    <td class="input-cell">
+                                        <select id="veh-tarp-a"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-tarp-b"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-tarp-c"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select id="veh-tarp-d"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Remark / Inspector</strong></td>
+                                    <td class="input-cell"><input type="text" id="veh-rem-a"></td>
+                                    <td class="input-cell"><input type="text" id="veh-rem-b"></td>
+                                    <td class="input-cell"><input type="text" id="veh-rem-c"></td>
+                                    <td class="input-cell"><input type="text" id="veh-rem-d"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveVehicleReport()">Save & Print Log</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PERSONAL HYGIENE CHECKLIST (QA/015) -->
+            <section id="hygiene-view" class="view-section">
+                <div class="form-card">
+                    <div class="form-header-details">
+                        <div class="form-group">
+                            <label>Inspection Date</label>
+                            <input type="date" class="form-control" id="hyg-date">
+                        </div>
+                        <div class="form-group">
+                            <label>Supervisor Signature</label>
+                            <input type="text" class="form-control" id="hyg-supervisor" placeholder="Hygiene Supervisor Sign">
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table" id="hyg-table">
+                            <thead>
+                                <tr>
+                                    <th>Sr No.</th>
+                                    <th>Employee Name</th>
+                                    <th>No Fever/Cough?</th>
+                                    <th>No Running Nose?</th>
+                                    <th>Clean Mask/Cloth?</th>
+                                    <th>Clean Hair Cap?</th>
+                                    <th>Nails/Beard Trimmed?</th>
+                                    <th>No Open Wounds?</th>
+                                    <th>No Chewing/Smoking?</th>
+                                    <th>No Flowers/Perfume?</th>
+                                    <th>No Jewellery?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- JS dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-secondary" onclick="addHygieneEmployeeRow()">+ Add Employee Entry</button>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+                        <button class="btn btn-primary" onclick="saveHygieneReport()">Save Hygiene log</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTORY / SAVED RECORDS VIEW -->
+            <section id="archives-view" class="view-section">
+                <div class="archive-list-card">
+                    <div class="archive-search-bar">
+                        <input type="text" class="form-control" id="search-logs" placeholder="Search by Date, SKU, or Batch No..." oninput="renderArchives()">
+                        <select class="form-control" style="max-width: 200px;" id="filter-sheet-type" onchange="renderArchives()">
+                            <option value="all">All Sheets</option>
+                            <option value="netcontent">Net Content (QA/011)</option>
+                            <option value="finishedproduct">Finished Product (QA/002)</option>
+                            <option value="release">Goods Release (QA/021)</option>
+                            <option value="light">Light Inspection (QA/018)</option>
+                            <option value="wtp">WTP Operator (QA/003)</option>
+                            <option value="minerals">Bailley Minerals (QA/004)</option>
+                            <option value="dispatch">Dispatch Record (QA/022)</option>
+                            <option value="vehicle">Vehicle GMP (QA/020)</option>
+                            <option value="hygiene">Personal Hygiene (QA/015)</option>
+                        </select>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="qa-table">
+                            <thead>
+                                <tr>
+                                    <th>Date Logged</th>
+                                    <th>Form Type</th>
+                                    <th>Key Indicators / Status</th>
+                                    <th>Log Details</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="archives-list-tbody">
+                                <!-- JS rendered saved logs -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Core App Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
