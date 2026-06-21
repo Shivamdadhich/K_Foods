@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>K Foods & Beverages - QA & Operations Suite</title>
     <link rel="stylesheet" href="style.css">
-    <!-- SVG Icon Helpers / ChartJS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -252,10 +251,6 @@
                 <div class="form-card">
                     <div class="form-header-details">
                         <div class="form-group">
-                            <label>Mfg Date</label>
-                            <input type="date" class="form-control" id="nc-mfg-date">
-                        </div>
-                        <div class="form-group">
                             <label>SKU (Product Size)</label>
                             <select class="form-control" id="nc-sku" onchange="updateNCSkuSpec()">
                                 <option value="200ml">200 ml</option>
@@ -284,10 +279,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- JS populated 22 valves -->
+                                <!-- Valve rows 1 to 22 -->
                             </tbody>
                         </table>
                     </div>
+                    <div style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">* Note :- Tare Weight = Bottle Wt. + Closure wt</div>
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
@@ -302,10 +298,6 @@
                 <div class="form-card">
                     <div class="form-header-details">
                         <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" id="fp-date">
-                        </div>
-                        <div class="form-group">
                             <label>Pack Size</label>
                             <input type="text" class="form-control" id="fp-pack-size" placeholder="e.g. 500ml">
                         </div>
@@ -319,12 +311,13 @@
                         </div>
                     </div>
 
+                    <h4>Finished Product Online Quality Parameters</h4>
                     <div class="table-container">
                         <table class="qa-table" id="fp-table">
                             <thead>
                                 <tr>
                                     <th>Time</th>
-                                    <th>Ozone Ozonator (0.4-0.6ppm)</th>
+                                    <th>Ozone in Ozonator (0.4-0.6ppm)</th>
                                     <th>Ozone Product (0.2-0.4ppm)</th>
                                     <th>Appearance (Clear)</th>
                                     <th>Odour (Agreeable)</th>
@@ -332,18 +325,81 @@
                                     <th>pH (6.0-8.5)</th>
                                     <th>TDS (100-125ppm)</th>
                                     <th>Hardness (Min 11ppm)</th>
-                                    <th>Calcium (Min 6ppm)</th>
+                                    <th>Calcium (Min 11ppm)</th>
+                                    <th>Magnesium (Min 6ppm)</th>
+                                    <th>Color (Max 2TCU)</th>
+                                    <th>Finished Prod (Max 2TCU)</th>
+                                    <th>Alkalinity (Max 200)</th>
+                                    <th>Chloride (Max 200)</th>
+                                    <th>Sulphate (Max 200)</th>
+                                    <th>RFC (Max 0.2ppm)</th>
                                     <th>Net Content</th>
                                     <th>Date Coding</th>
-                                    <th>Labeling/Glue</th>
+                                    <th>Cable Align</th>
+                                    <th>Label Wrinkle</th>
+                                    <th>Glue Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- JS inserts row additions dynamically -->
+                                <!-- Hourly rows -->
                             </tbody>
                         </table>
                     </div>
                     <button class="btn btn-secondary" onclick="addFPHourlyRow()">+ Add Hourly Entry</button>
+
+                    <h4 style="margin-top: 1.5rem;">Jar Washing and Sanitation Logs</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <h5>Jar External Washing</h5>
+                            <table class="qa-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Chemical (0.5-1%)</th>
+                                        <th>Cleaning</th>
+                                        <th>Scrubbing/Rinsing</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="input-cell"><input type="time" value="08:00"></td>
+                                        <td class="input-cell"><input type="text" value="SU 120"></td>
+                                        <td class="input-cell"><input type="text" value="OK"></td>
+                                        <td class="input-cell"><input type="text" value="Done"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <h5>Jar Internal Rinsing (Pressure &gt; 2kg/cm2, Time &gt; 20s)</h5>
+                            <table class="qa-table">
+                                <thead>
+                                    <tr>
+                                        <th>Pre Rinse</th>
+                                        <th>Hot Water (50-60°C)</th>
+                                        <th>Pre Final</th>
+                                        <th>Total Time (s)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="input-cell"><input type="text" placeholder="2 Jets / 2.2kg" value="2 Jets / 2kg"></td>
+                                        <td class="input-cell"><input type="text" placeholder="55°C / 0.8%" value="55C / 0.5%"></td>
+                                        <td class="input-cell"><input type="text" value="OK"></td>
+                                        <td class="input-cell"><input type="number" value="22"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <h4 style="margin-top: 1.5rem;">Start-up & Changeover Safety Activities</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <label class="checkbox-cell"><input type="checkbox" checked> Jar washer tank inside cleaning</label>
+                        <label class="checkbox-cell"><input type="checkbox" checked> Jet nozzles cleaning</label>
+                        <label class="checkbox-cell"><input type="checkbox" checked> Capper hopper cleaning (70% Alcohol)</label>
+                        <label class="checkbox-cell"><input type="checkbox" checked> Capper chute cleaning (70% IPA)</label>
+                    </div>
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
@@ -357,10 +413,6 @@
             <section id="release-view" class="view-section">
                 <div class="form-card">
                     <div class="form-header-details">
-                        <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" id="rel-date">
-                        </div>
                         <div class="form-group">
                             <label>To</label>
                             <input type="text" class="form-control" id="rel-to" value="The Warehouse Incharge">
@@ -387,7 +439,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- JS dynamically inserts rows -->
+                                <!-- Dynamic rows -->
                             </tbody>
                         </table>
                     </div>
@@ -405,10 +457,6 @@
             <section id="light-view" class="view-section">
                 <div class="form-card">
                     <div class="form-header-details">
-                        <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" id="li-date">
-                        </div>
                         <div class="form-group">
                             <label>Pack Size</label>
                             <input type="text" class="form-control" id="li-pack-size">
@@ -443,7 +491,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- JS inserts inspection rows -->
+                                <!-- Dynamic rows -->
                             </tbody>
                         </table>
                     </div>
@@ -462,10 +510,6 @@
                 <div class="form-card">
                     <div class="form-header-details">
                         <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" id="wtp-date">
-                        </div>
-                        <div class="form-group">
                             <label>WTP Operator</label>
                             <input type="text" class="form-control" id="wtp-operator">
                         </div>
@@ -475,7 +519,7 @@
                         </div>
                     </div>
 
-                    <h4>Source Water & Filters Outlet Logs</h4>
+                    <h4>Source Water & RO Filtration Logs</h4>
                     <div class="table-container">
                         <table class="qa-table" id="wtp-table-logs">
                             <thead>
@@ -493,7 +537,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- JS populated -->
+                                <!-- Logs -->
                             </tbody>
                         </table>
                     </div>
@@ -517,7 +561,7 @@
                                     <td class="input-cell"><input type="text" value="Chlorine" id="wtp-chem-1"></td>
                                     <td class="input-cell"><input type="text" id="wtp-supplier-1"></td>
                                     <td class="input-cell"><input type="text" placeholder="MM/YY" id="wtp-dates-1"></td>
-                                    <td class="input-cell"><input type="text" placeholder="e.g. 5 ml/hr" id="wtp-dosing-1"></td>
+                                    <td class="input-cell"><input type="text" placeholder="5 ml/hr" id="wtp-dosing-1"></td>
                                     <td class="input-cell"><input type="text" placeholder="10:00 - 10:30" id="wtp-bw-psf"></td>
                                     <td class="input-cell"><input type="text" placeholder="10:30 - 11:00" id="wtp-bw-acf"></td>
                                 </tr>
@@ -537,10 +581,6 @@
             <section id="minerals-view" class="view-section">
                 <div class="form-card">
                     <div class="form-header-details">
-                        <div class="form-group">
-                            <label>Date</label>
-                            <input type="date" class="form-control" id="min-date">
-                        </div>
                         <div class="form-group">
                             <label>Format Number</label>
                             <input type="text" class="form-control" value="Format No.KFB/QA/004" disabled>
@@ -602,10 +642,6 @@
                 <div class="form-card">
                     <div class="form-header-details">
                         <div class="form-group">
-                            <label>Month / Period</label>
-                            <input type="month" class="form-control" id="disp-month">
-                        </div>
-                        <div class="form-group">
                             <label>Format Number</label>
                             <input type="text" class="form-control" value="Format No.KFB/QA/022" disabled>
                         </div>
@@ -625,7 +661,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- JS dynamic rows -->
+                                <!-- Dynamic rows -->
                             </tbody>
                         </table>
                     </div>
@@ -643,10 +679,6 @@
             <section id="vehicle-view" class="view-section">
                 <div class="form-card">
                     <div class="form-header-details">
-                        <div class="form-group">
-                            <label>Inspection Date</label>
-                            <input type="date" class="form-control" id="veh-date">
-                        </div>
                         <div class="form-group">
                             <label>Format Number</label>
                             <input type="text" class="form-control" value="Format No.KFB/QA/020" disabled>
@@ -748,10 +780,6 @@
                 <div class="form-card">
                     <div class="form-header-details">
                         <div class="form-group">
-                            <label>Inspection Date</label>
-                            <input type="date" class="form-control" id="hyg-date">
-                        </div>
-                        <div class="form-group">
                             <label>Supervisor Signature</label>
                             <input type="text" class="form-control" id="hyg-supervisor" placeholder="Hygiene Supervisor Sign">
                         </div>
@@ -775,7 +803,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- JS dynamic rows -->
+                                <!-- Dynamic Employee Rows -->
                             </tbody>
                         </table>
                     </div>
@@ -842,12 +870,12 @@
                                     <th>Date Logged</th>
                                     <th>Form Type</th>
                                     <th>Key Indicators / Status</th>
-                                    <th>Log Details</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="archives-list-tbody">
-                                <!-- JS rendered saved logs -->
+                                <!-- Saved logs -->
                             </tbody>
                         </table>
                     </div>
@@ -859,7 +887,6 @@
     <!-- CONSOLIDATED EXPORT PRINT VIEW -->
     <div id="consolidated-print-layout" class="print-only"></div>
 
-    <!-- Core App Logic -->
     <script src="app.js"></script>
 </body>
 </html>

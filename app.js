@@ -274,13 +274,26 @@ function addFPHourlyRow(timeVal = '') {
         <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
         <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
         <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
-        <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+        <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+        <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+        <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+        <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+        <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+        <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+        <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+        <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
         <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
         <td class="input-cell">
             <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
         </td>
         <td class="input-cell">
-            <select class="fp-label"><option value="OK">OK</option><option value="Wrinkles">Wrinkles</option></select>
+            <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+        </td>
+        <td class="input-cell">
+            <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+        </td>
+        <td class="input-cell">
+            <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
         </td>
     `;
     tbody.appendChild(tr);
@@ -390,7 +403,7 @@ function validateWTP(input, maxVal) {
     }
 }
 
-// 6. Bailley Minerals Record
+// 6. Minerals
 function calcClosingStock() {
     for (let i = 1; i <= 2; i++) {
         const opening = parseFloat(document.getElementById(`min-op-${i}`).value) || 0;
@@ -412,7 +425,7 @@ function calcClosingStock() {
     }
 }
 
-// 7. Dispatch Record
+// 7. Dispatch
 function initDispatchTable() {
     const tbody = document.querySelector('#disp-table tbody');
     if (tbody) {
@@ -444,7 +457,7 @@ function addDispatchRow() {
     tbody.appendChild(tr);
 }
 
-// 8. Personal Hygiene Checklist
+// 8. Hygiene
 function initHygieneTable() {
     const tbody = document.querySelector('#hyg-table tbody');
     tbody.innerHTML = '';
@@ -491,10 +504,34 @@ function saveActiveReport(sheetType, status) {
         const times = Array.from(document.querySelectorAll('.fp-time')).map(el => el.value);
         const ozoneOz = Array.from(document.querySelectorAll('.fp-ozone-oz')).map(el => el.value);
         const ozoneProd = Array.from(document.querySelectorAll('.fp-ozone-prod')).map(el => el.value);
+        
+        const appearances = Array.from(document.querySelectorAll('.fp-appearance')).map(el => el.value);
+        const odours = Array.from(document.querySelectorAll('.fp-odour')).map(el => el.value);
+        const tastes = Array.from(document.querySelectorAll('.fp-taste')).map(el => el.value);
+        
         const ph = Array.from(document.querySelectorAll('.fp-ph')).map(el => el.value);
         const tds = Array.from(document.querySelectorAll('.fp-tds')).map(el => el.value);
+        const hardness = Array.from(document.querySelectorAll('.fp-hardness')).map(el => el.value);
+        const calciums = Array.from(document.querySelectorAll('.fp-calcium')).map(el => el.value);
+        const magnesiums = Array.from(document.querySelectorAll('.fp-magnesium')).map(el => el.value);
+        const colors = Array.from(document.querySelectorAll('.fp-color')).map(el => el.value);
+        const finprods = Array.from(document.querySelectorAll('.fp-finprod')).map(el => el.value);
+        const alkalinities = Array.from(document.querySelectorAll('.fp-alkalinity')).map(el => el.value);
+        const chlorides = Array.from(document.querySelectorAll('.fp-chloride')).map(el => el.value);
+        const sulphates = Array.from(document.querySelectorAll('.fp-sulphate')).map(el => el.value);
+        const rfcs = Array.from(document.querySelectorAll('.fp-rfc')).map(el => el.value);
         
-        payload = { packSize, chemist, times, ozoneOz, ozoneProd, ph, tds };
+        const netContents = Array.from(document.querySelectorAll('.fp-net-content')).map(el => el.value);
+        const codings = Array.from(document.querySelectorAll('.fp-coding')).map(el => el.value);
+        const cableAligns = Array.from(document.querySelectorAll('.fp-cable')).map(el => el.value);
+        const labelWrinkles = Array.from(document.querySelectorAll('.fp-wrinkle')).map(el => el.value);
+        const glueStatuses = Array.from(document.querySelectorAll('.fp-glue')).map(el => el.value);
+        
+        payload = { 
+            packSize, chemist, times, ozoneOz, ozoneProd, appearances, odours, tastes, 
+            ph, tds, hardness, calciums, magnesiums, colors, finprods, alkalinities, 
+            chlorides, sulphates, rfcs, netContents, codings, cableAligns, labelWrinkles, glueStatuses 
+        };
         summary = `Online Product Analysis (${status}) by ${chemist || 'Chemist'}`;
     }
     else if (sheetType === 'release') {
@@ -682,8 +719,25 @@ function loadSavedLogIntoForm(log) {
             const latestRow = rows[rows.length - 1];
             latestRow.querySelector('.fp-ozone-oz').value = p.ozoneOz[idx] || '';
             latestRow.querySelector('.fp-ozone-prod').value = p.ozoneProd[idx] || '';
+            latestRow.querySelector('.fp-appearance').value = p.appearances[idx] || 'Clear';
+            latestRow.querySelector('.fp-odour').value = p.odours[idx] || 'Agreeable';
+            latestRow.querySelector('.fp-taste').value = p.tastes[idx] || 'Agreeable';
             latestRow.querySelector('.fp-ph').value = p.ph[idx] || '';
             latestRow.querySelector('.fp-tds').value = p.tds[idx] || '';
+            latestRow.querySelector('.fp-hardness').value = p.hardness[idx] || '';
+            latestRow.querySelector('.fp-calcium').value = p.calciums[idx] || '';
+            latestRow.querySelector('.fp-magnesium').value = p.magnesiums[idx] || '';
+            latestRow.querySelector('.fp-color').value = p.colors[idx] || '';
+            latestRow.querySelector('.fp-finprod').value = p.finprods[idx] || '';
+            latestRow.querySelector('.fp-alkalinity').value = p.alkalinities[idx] || '';
+            latestRow.querySelector('.fp-chloride').value = p.chlorides[idx] || '';
+            latestRow.querySelector('.fp-sulphate').value = p.sulphates[idx] || '';
+            latestRow.querySelector('.fp-rfc').value = p.rfcs[idx] || '';
+            latestRow.querySelector('.fp-net-content').value = p.netContents[idx] || '';
+            latestRow.querySelector('.fp-coding').value = p.codings[idx] || 'Clear';
+            latestRow.querySelector('.fp-cable').value = p.cableAligns[idx] || 'OK';
+            latestRow.querySelector('.fp-wrinkle').value = p.labelWrinkles[idx] || 'No';
+            latestRow.querySelector('.fp-glue').value = p.glueStatuses[idx] || 'OK';
         });
     }
     else if (log.type === 'release') {
@@ -881,7 +935,6 @@ function printSavedLog(id) {
     const log = db.logs.find(l => l.id === id);
     if (!log) return;
     
-    // Switch to date context and print
     document.getElementById('global-working-date').value = log.date;
     loadSavedLogIntoForm(log);
     switchView(log.type);
@@ -926,7 +979,6 @@ function generateConsolidatedReport() {
             <hr style="margin-bottom: 2rem; border: 1px solid #cbd5e1;">
     `;
 
-    // Render detailed day-by-day sheets
     logs.forEach(log => {
         const p = log.payload;
         dynamicHtml += `
@@ -964,14 +1016,18 @@ function generateConsolidatedReport() {
         else if (log.type === 'finishedproduct') {
             dynamicHtml += `
                 <p><strong>Pack Size:</strong> ${p.packSize} | <strong>Line Chemist:</strong> ${p.chemist}</p>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 0.5rem;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 0.5rem;">
                     <thead>
                         <tr style="background: #f8fafc;">
-                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Time</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Ozone Oz</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 6px;">Ozone Prod</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 6px;">pH</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 6px;">TDS</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Time</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Oz Oz</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Oz Prod</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">pH</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">TDS</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Ca</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Mg</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Alkalinity</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Chloride</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -982,6 +1038,10 @@ function generateConsolidatedReport() {
                                 <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ozoneProd[idx] || '-'}</td>
                                 <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ph[idx] || '-'}</td>
                                 <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.tds[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.calciums[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.magnesiums[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.alkalinities[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.chlorides[idx] || '-'}</td>
                             </tr>
                         `).join('')}
                     </tbody>
