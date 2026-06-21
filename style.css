@@ -164,6 +164,8 @@ body {
     min-height: 100vh;
     padding: 2rem;
     transition: all 0.3s ease;
+    max-width: calc(100% - 280px);
+    overflow-x: hidden;
 }
 
 .top-bar {
@@ -392,6 +394,8 @@ body {
 /* Spreadsheet QA Tables */
 .table-container {
     overflow-x: auto;
+    max-width: 100%;
+    width: 100%;
     margin-bottom: 1.5rem;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
