@@ -193,14 +193,14 @@
                 <div class="dashboard-grid">
                     <div class="stats-card">
                         <div class="stats-info">
-                            <h3>Total Logs Submitted</h3>
+                            <h3>Finalized Reports</h3>
                             <p id="stat-total-logs">0</p>
                         </div>
                         <div class="stats-icon blue">📜</div>
                     </div>
                     <div class="stats-card">
                         <div class="stats-info">
-                            <h3>Unreleased Batches</h3>
+                            <h3>Pending Drafts</h3>
                             <p id="stat-pending-releases">0</p>
                         </div>
                         <div class="stats-icon yellow">📦</div>
@@ -286,7 +286,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveNetContentReport()">Save & Print Report</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('netcontent', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('netcontent', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -341,7 +342,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveFinishedProductReport()">Save & Print</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('finishedproduct', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('finishedproduct', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -389,7 +391,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveReleaseReport()">Save & Release</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('release', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('release', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -444,7 +447,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveLightReport()">Save & Print</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('light', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('light', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -519,7 +523,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveWTPReport()">Save & Print</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('wtp', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('wtp', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -582,7 +587,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveMineralsReport()">Save Stock Log</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('minerals', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('minerals', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -625,7 +631,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveDispatchReport()">Save Dispatch Log</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('dispatch', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('dispatch', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -728,7 +735,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveVehicleReport()">Save & Print Log</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('vehicle', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('vehicle', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>
@@ -773,7 +781,8 @@
 
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
-                        <button class="btn btn-primary" onclick="saveHygieneReport()">Save Hygiene log</button>
+                        <button class="btn btn-secondary" onclick="saveActiveReport('hygiene', 'Draft')">Save as Draft</button>
+                        <button class="btn btn-primary" onclick="saveActiveReport('hygiene', 'Final')">Submit (Final)</button>
                     </div>
                 </div>
             </section>

@@ -3,6 +3,8 @@ let db = {
     logs: JSON.parse(localStorage.getItem('kf_qa_logs')) || []
 };
 
+let currentEditLogId = null;
+
 // SKU standard specs (Target grams, tolerance +/- grams)
 const SKU_SPECS = {
     '200ml': { target: 200, tolerance: 2 },
@@ -76,6 +78,12 @@ function logout() {
 
 // View Swapper
 function switchView(viewId) {
+    // Clear edit session if navigating to a clean form from menu
+    if (event && event.currentTarget && event.currentTarget.classList.contains('nav-item')) {
+        currentEditLogId = null;
+        resetAllForms();
+    }
+
     document.querySelectorAll('.view-section').forEach(view => {
         view.classList.remove('active');
     });
@@ -89,12 +97,11 @@ function switchView(viewId) {
     // Make corresponding sidebar menu item active
     const menuItems = document.querySelectorAll('.nav-item');
     menuItems.forEach(item => {
-        if (item.getAttribute('onclick').includes(viewId)) {
+        if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(viewId)) {
             item.classList.add('active');
         }
     });
 
-    // Update Title
     const titleMap = {
         'dashboard': 'Dashboard Overview',
         'netcontent': 'Net Content Analysis (QA/011)',
@@ -115,13 +122,33 @@ function switchView(viewId) {
     }
 }
 
+function resetAllForms() {
+    const today = new Date().toISOString().split('T')[0];
+    document.querySelectorAll('input[type="date"]').forEach(inp => inp.value = today);
+    initNetContentTable();
+    initFinishedProductTable();
+    initReleaseTable();
+    initLightInspectionTable();
+    initWTPTable();
+    initHygieneTable();
+    document.getElementById('min-op-1').value = 50;
+    document.getElementById('min-sol-1').value = 0;
+    document.getElementById('min-prod-1').value = 0;
+    document.getElementById('min-wast-1').value = 0;
+    document.getElementById('min-rec-1').value = 0;
+    document.getElementById('min-op-2').value = 40;
+    document.getElementById('min-sol-2').value = 0;
+    document.getElementById('min-prod-2').value = 0;
+    document.getElementById('min-wast-2').value = 0;
+    document.getElementById('min-rec-2').value = 0;
+    calcClosingStock();
+    initDispatchTable();
+}
+
 // 1. Net Content Analysis Setup
 function initNetContentTable() {
     const tbody = document.querySelector('#nc-table tbody');
     tbody.innerHTML = '';
-    
-    const sku = document.getElementById('nc-sku').value;
-    const spec = SKU_SPECS[sku];
     
     for (let i = 1; i <= 22; i++) {
         const tr = document.createElement('tr');
@@ -138,7 +165,6 @@ function initNetContentTable() {
 }
 
 function updateNCSkuSpec() {
-    // Re-calculate all rows when SKU changes
     for (let i = 1; i <= 22; i++) {
         calcNetContentRow(i);
     }
@@ -164,7 +190,6 @@ function calcNetContentRow(valveNo) {
     }
 
     const netWt = goods - tare;
-    // Assuming water density ≈ 1g/ml
     const netMl = netWt; 
     
     netWtCell.innerText = netWt.toFixed(1);
@@ -186,7 +211,6 @@ function calcNetContentRow(valveNo) {
 function initFinishedProductTable() {
     const tbody = document.querySelector('#fp-table tbody');
     tbody.innerHTML = '';
-    // Standard shifts cover hourly checks
     const defaultHours = ["08:00", "10:00", "12:00", "14:00", "16:00"];
     defaultHours.forEach(time => addFPHourlyRow(time));
 }
@@ -263,8 +287,6 @@ function addReleaseRow() {
         </td>
     `;
     tbody.appendChild(tr);
-    
-    // Default mfg date to today
     const dateInput = tr.querySelector('.rel-mfg-date');
     if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
 }
@@ -273,7 +295,6 @@ function addReleaseRow() {
 function initLightInspectionTable() {
     const tbody = document.querySelector('#li-table tbody');
     tbody.innerHTML = '';
-    // Standard hourly inspections
     const hours = ["09:00", "11:00", "13:00", "15:00"];
     hours.forEach(time => addLightInspectionRow(time));
 }
@@ -343,12 +364,13 @@ function calcClosingStock() {
 
         const closing = opening + rec - (sol + prod + wastage);
         const cell = document.getElementById(`min-cls-${i}`);
-        cell.innerText = closing.toFixed(2);
-        
-        if (closing < 10) {
-            cell.className = 'calc-cell flag-out-of-spec';
-        } else {
-            cell.className = 'calc-cell flag-success';
+        if (cell) {
+            cell.innerText = closing.toFixed(2);
+            if (closing < 10) {
+                cell.className = 'calc-cell flag-out-of-spec';
+            } else {
+                cell.className = 'calc-cell flag-success';
+            }
         }
     }
 }
@@ -356,8 +378,10 @@ function calcClosingStock() {
 // 7. Dispatch Record
 function initDispatchTable() {
     const tbody = document.querySelector('#disp-table tbody');
-    tbody.innerHTML = '';
-    addDispatchRow();
+    if (tbody) {
+        tbody.innerHTML = '';
+        addDispatchRow();
+    }
 }
 
 function addDispatchRow() {
@@ -384,7 +408,6 @@ function addDispatchRow() {
     `;
     tbody.appendChild(tr);
 
-    // Default dates
     const today = new Date().toISOString().split('T')[0];
     tr.querySelector('.disp-date').value = today;
     tr.querySelector('.disp-mfg').value = today;
@@ -418,105 +441,175 @@ function addHygieneEmployeeRow(nameVal = '', index = '') {
     tbody.appendChild(tr);
 }
 
-// Global Save Utility
-function saveLogEntry(sheetType, dataSummary, detailsPayload) {
-    const newLog = {
-        id: 'log_' + Date.now(),
-        date: new Date().toISOString().split('T')[0],
-        type: sheetType,
-        summary: dataSummary,
-        payload: detailsPayload
-    };
-    db.logs.push(newLog);
+// Universal Save Flow supporting Drafts
+function saveActiveReport(sheetType, status) {
+    let payload = {};
+    let summary = '';
+    let date = new Date().toISOString().split('T')[0];
+
+    if (sheetType === 'netcontent') {
+        date = document.getElementById('nc-mfg-date').value;
+        const sku = document.getElementById('nc-sku').value;
+        const goods = Array.from(document.querySelectorAll('.nc-goods')).map(el => parseFloat(el.value) || 0);
+        const tares = Array.from(document.querySelectorAll('.nc-tare')).map(el => parseFloat(el.value) || 0);
+        payload = { date, sku, goods, tares };
+        summary = `${sku} Valve Check (${status}). Entries: ${goods.filter(g => g > 0).length}`;
+    } 
+    else if (sheetType === 'finishedproduct') {
+        date = document.getElementById('fp-date').value;
+        const packSize = document.getElementById('fp-pack-size').value;
+        const chemist = document.getElementById('fp-chemist').value;
+        
+        const times = Array.from(document.querySelectorAll('.fp-time')).map(el => el.value);
+        const ozoneOz = Array.from(document.querySelectorAll('.fp-ozone-oz')).map(el => el.value);
+        const ozoneProd = Array.from(document.querySelectorAll('.fp-ozone-prod')).map(el => el.value);
+        const ph = Array.from(document.querySelectorAll('.fp-ph')).map(el => el.value);
+        const tds = Array.from(document.querySelectorAll('.fp-tds')).map(el => el.value);
+        
+        payload = { date, packSize, chemist, times, ozoneOz, ozoneProd, ph, tds };
+        summary = `Online Product Analysis (${status}) by ${chemist || 'Chemist'}`;
+    }
+    else if (sheetType === 'release') {
+        date = document.getElementById('rel-date').value;
+        const target = document.getElementById('rel-to').value;
+        payload = { date, target };
+        summary = `Goods Release Auth (${status}) to ${target}`;
+    }
+    else if (sheetType === 'light') {
+        date = document.getElementById('li-date').value;
+        const pack = document.getElementById('li-pack-size').value;
+        const shift = document.getElementById('li-shift').value;
+        payload = { date, pack, shift };
+        summary = `Light Defect Inspection (${status}) [${shift}]`;
+    }
+    else if (sheetType === 'wtp') {
+        date = document.getElementById('wtp-date').value;
+        const operator = document.getElementById('wtp-operator').value;
+        payload = { date, operator };
+        summary = `WTP Operations Log (${status}) [${operator}]`;
+    }
+    else if (sheetType === 'minerals') {
+        date = document.getElementById('min-date').value;
+        calcClosingStock();
+        const base1Cls = document.getElementById('min-cls-1').innerText;
+        const base2Cls = document.getElementById('min-cls-2').innerText;
+        payload = {
+            date,
+            op1: document.getElementById('min-op-1').value,
+            sol1: document.getElementById('min-sol-1').value,
+            prod1: document.getElementById('min-prod-1').value,
+            wast1: document.getElementById('min-wast-1').value,
+            rec1: document.getElementById('min-rec-1').value,
+            op2: document.getElementById('min-op-2').value,
+            sol2: document.getElementById('min-sol-2').value,
+            prod2: document.getElementById('min-prod-2').value,
+            wast2: document.getElementById('min-wast-2').value,
+            rec2: document.getElementById('min-rec-2').value
+        };
+        summary = `Bailley Mineral Record (${status}). Total: ${parseFloat(base1Cls) + parseFloat(base2Cls)} kg`;
+    }
+    else if (sheetType === 'dispatch') {
+        date = document.getElementById('disp-month').value + '-01';
+        summary = `Dispatch Log (${status})`;
+    }
+    else if (sheetType === 'vehicle') {
+        date = document.getElementById('veh-date').value;
+        summary = `Vehicle GMP Inspection (${status})`;
+    }
+    else if (sheetType === 'hygiene') {
+        date = document.getElementById('hyg-date').value;
+        summary = `Personal Hygiene Logs (${status})`;
+    }
+
+    if (currentEditLogId) {
+        // Update existing log
+        const idx = db.logs.findIndex(l => l.id === currentEditLogId);
+        if (idx !== -1) {
+            db.logs[idx].status = status;
+            db.logs[idx].summary = summary;
+            db.logs[idx].payload = payload;
+            db.logs[idx].date = date;
+        }
+    } else {
+        // Create new log
+        const newLog = {
+            id: 'log_' + Date.now(),
+            date: date,
+            type: sheetType,
+            status: status,
+            summary: summary,
+            payload: payload
+        };
+        db.logs.push(newLog);
+    }
+
     localStorage.setItem('kf_qa_logs', JSON.stringify(db.logs));
+    currentEditLogId = null;
     updateDashboardStats();
-    alert('Quality log saved successfully to local database!');
+    
+    alert(`Report saved as ${status.toUpperCase()}!`);
+    
+    if (status === 'Final') {
+        window.print();
+    }
+    
     switchView('dashboard');
 }
 
-// 1. Save Net Content
-function saveNetContentReport() {
-    const date = document.getElementById('nc-mfg-date').value;
-    const sku = document.getElementById('nc-sku').value;
-    const goods = Array.from(document.querySelectorAll('.nc-goods')).map(el => parseFloat(el.value) || 0);
-    const tares = Array.from(document.querySelectorAll('.nc-tare')).map(el => parseFloat(el.value) || 0);
+// Resume editing saved draft payload
+function resumeEditingLog(id) {
+    const log = db.logs.find(l => l.id === id);
+    if (!log) return;
     
-    const fails = goods.filter((g, idx) => {
-        const spec = SKU_SPECS[sku];
-        const net = g - tares[idx];
-        return g > 0 && (net < (spec.target - spec.tolerance) || net > (spec.target + spec.tolerance));
-    }).length;
+    currentEditLogId = log.id;
+    switchView(log.type);
 
-    const summary = `${sku} Net Content check. Valved rows: ${goods.filter(g => g > 0).length}. Out-of-spec: ${fails}`;
-    saveLogEntry('netcontent', summary, { date, sku, goods, tares });
-    window.print();
-}
-
-// 2. Save Finished Product
-function saveFinishedProductReport() {
-    const date = document.getElementById('fp-date').value;
-    const packSize = document.getElementById('fp-pack-size').value;
-    const chemist = document.getElementById('fp-chemist').value;
-    
-    saveLogEntry('finishedproduct', `Online Log: ${packSize} by ${chemist}`, { date, packSize, chemist });
-    window.print();
-}
-
-// 3. Save Release Report
-function saveReleaseReport() {
-    const date = document.getElementById('rel-date').value;
-    const target = document.getElementById('rel-to').value;
-    
-    saveLogEntry('release', `Authorized Release Log to: ${target}`, { date, target });
-    window.print();
-}
-
-// 4. Save Light Inspection Report
-function saveLightReport() {
-    const date = document.getElementById('li-date').value;
-    const pack = document.getElementById('li-pack-size').value;
-    const shift = document.getElementById('li-shift').value;
-    
-    saveLogEntry('light', `Defect inspection logs for ${pack} (${shift})`, { date, pack, shift });
-    window.print();
-}
-
-// 5. Save WTP Report
-function saveWTPReport() {
-    const date = document.getElementById('wtp-date').value;
-    const operator = document.getElementById('wtp-operator').value;
-    
-    saveLogEntry('wtp', `RO & Filtration Operator Log by ${operator}`, { date, operator });
-    window.print();
-}
-
-// 6. Save Minerals Report
-function saveMineralsReport() {
-    const date = document.getElementById('min-date').value;
-    calcClosingStock();
-    const stock1 = document.getElementById('min-cls-1').innerText;
-    const stock2 = document.getElementById('min-cls-2').innerText;
-    
-    saveLogEntry('minerals', `Base 1 Stock: ${stock1}kg, Base 2 Stock: ${stock2}kg`, { date, stock1, stock2 });
-}
-
-// 7. Save Dispatch Report
-function saveDispatchReport() {
-    const month = document.getElementById('disp-month').value;
-    saveLogEntry('dispatch', `Dispatch Summary for Month: ${month}`, { month });
-}
-
-// 8. Save Vehicle Report
-function saveVehicleReport() {
-    const date = document.getElementById('veh-date').value;
-    saveLogEntry('vehicle', `Vehicle dispatch GMP checklists`, { date });
-    window.print();
-}
-
-// 9. Save Hygiene Report
-function saveHygieneReport() {
-    const date = document.getElementById('hyg-date').value;
-    saveLogEntry('hygiene', `Personal hygiene checklists`, { date });
+    // Populate data back into specific forms
+    const p = log.payload;
+    if (log.type === 'netcontent') {
+        document.getElementById('nc-mfg-date').value = p.date || '';
+        document.getElementById('nc-sku').value = p.sku || '500ml';
+        initNetContentTable();
+        p.goods.forEach((g, idx) => {
+            const rowIdx = idx + 1;
+            const goodsInp = document.querySelector(`.nc-goods[data-valve="${rowIdx}"]`);
+            const tareInp = document.querySelector(`.nc-tare[data-valve="${rowIdx}"]`);
+            if (goodsInp) goodsInp.value = g;
+            if (tareInp) tareInp.value = p.tares[idx];
+            calcNetContentRow(rowIdx);
+        });
+    } 
+    else if (log.type === 'finishedproduct') {
+        document.getElementById('fp-date').value = p.date || '';
+        document.getElementById('fp-pack-size').value = p.packSize || '';
+        document.getElementById('fp-chemist').value = p.chemist || '';
+        
+        const tbody = document.querySelector('#fp-table tbody');
+        tbody.innerHTML = '';
+        p.times.forEach((t, idx) => {
+            addFPHourlyRow(t);
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.fp-ozone-oz').value = p.ozoneOz[idx] || '';
+            latestRow.querySelector('.fp-ozone-prod').value = p.ozoneProd[idx] || '';
+            latestRow.querySelector('.fp-ph').value = p.ph[idx] || '';
+            latestRow.querySelector('.fp-tds').value = p.tds[idx] || '';
+        });
+    }
+    else if (log.type === 'minerals') {
+        document.getElementById('min-date').value = p.date || '';
+        document.getElementById('min-op-1').value = p.op1 || 0;
+        document.getElementById('min-sol-1').value = p.sol1 || 0;
+        document.getElementById('min-prod-1').value = p.prod1 || 0;
+        document.getElementById('min-wast-1').value = p.wast1 || 0;
+        document.getElementById('min-rec-1').value = p.rec1 || 0;
+        document.getElementById('min-op-2').value = p.op2 || 0;
+        document.getElementById('min-sol-2').value = p.sol2 || 0;
+        document.getElementById('min-prod-2').value = p.prod2 || 0;
+        document.getElementById('min-wast-2').value = p.wast2 || 0;
+        document.getElementById('min-rec-2').value = p.rec2 || 0;
+        calcClosingStock();
+    }
 }
 
 // Render Archives list
@@ -540,12 +633,16 @@ function renderArchives() {
 
     filtered.forEach(log => {
         const tr = document.createElement('tr');
+        const badgeColor = log.status === 'Final' ? 'var(--success)' : 'var(--warning)';
+        const badgeBg = log.status === 'Final' ? 'var(--success-light)' : 'var(--warning-light)';
+        
         tr.innerHTML = `
             <td><strong>${log.date}</strong></td>
             <td><span class="system-status" style="background-color: var(--primary-light); color: var(--primary);">${log.type.toUpperCase()}</span></td>
             <td>${log.summary}</td>
-            <td>Batch Logs Stored</td>
+            <td><span class="system-status" style="background-color: ${badgeBg}; color: ${badgeColor}; font-weight: 700;">${log.status || 'Final'}</span></td>
             <td>
+                ${log.status === 'Draft' ? `<button class="btn btn-secondary btn-sm" onclick="resumeEditingLog('${log.id}')" style="background: var(--primary-light); color: var(--primary);">Resume Editing</button>` : ''}
                 <button class="btn btn-secondary btn-sm" onclick="printSavedLog('${log.id}')">Print / View</button>
                 <button class="btn btn-danger btn-sm" onclick="deleteSavedLog('${log.id}')">Delete</button>
             </td>
@@ -557,7 +654,8 @@ function renderArchives() {
 function printSavedLog(id) {
     const log = db.logs.find(l => l.id === id);
     if (!log) return;
-    alert(`Showing logged entry metadata: \n\n${JSON.stringify(log, null, 2)}\n\n(Click print in the browser to print the standard form format)`);
+    alert(`Logged values: \n\n${JSON.stringify(log.payload, null, 2)}\n\n(Printing document formats)`);
+    window.print();
 }
 
 function deleteSavedLog(id) {
@@ -571,15 +669,16 @@ function deleteSavedLog(id) {
 
 // Update Dashboard Statistics
 function updateDashboardStats() {
-    document.getElementById('stat-total-logs').innerText = db.logs.length;
+    document.getElementById('stat-total-logs').innerText = db.logs.filter(l => l.status === 'Final').length;
     
-    const releases = db.logs.filter(l => l.type === 'release');
-    document.getElementById('stat-pending-releases').innerText = releases.length;
+    // Count drafts pending completion
+    const drafts = db.logs.filter(l => l.status === 'Draft');
+    document.getElementById('stat-pending-releases').innerText = drafts.length;
 
     // Get mineral stocks
     calcClosingStock();
-    const base1Cls = parseFloat(document.getElementById('min-cls-1').innerText) || 0;
-    const base2Cls = parseFloat(document.getElementById('min-cls-2').innerText) || 0;
+    const base1Cls = document.getElementById('min-cls-1') ? (parseFloat(document.getElementById('min-cls-1').innerText) || 0) : 0;
+    const base2Cls = document.getElementById('min-cls-2') ? (parseFloat(document.getElementById('min-cls-2').innerText) || 0) : 0;
     document.getElementById('stat-minerals-stock').innerText = `${(base1Cls + base2Cls).toFixed(1)} kg`;
 }
 
@@ -588,7 +687,6 @@ let trendChart;
 function initChart() {
     const ctx = document.getElementById('qaTrendsChart').getContext('2d');
     
-    // Filter out values to draw trends
     const mockTDS = [105, 112, 108, 114, 110, 115, 111];
     const mockPH = [7.2, 7.3, 7.1, 7.2, 7.0, 7.2, 7.4];
     
