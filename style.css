@@ -402,7 +402,7 @@ body {
     border-radius: var(--radius-md);
 }
 
-#fp-table { min-width: 2000px; }
+#fp-table { width: 100% !important; }
 #wtp-table-logs { min-width: 1300px; }
 #nc-table { min-width: 800px; }
 #rel-table { min-width: 1000px; }
