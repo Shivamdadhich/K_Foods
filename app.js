@@ -548,7 +548,7 @@ function addDispatchRow() {
 function initHygieneTable() {
     const tbody = document.querySelector('#hyg-table tbody');
     tbody.innerHTML = '';
-    addHygieneEmployeeRow("Ramesh Kumar", 1);
+    addHygieneEmployeeRow("", 1);
 }
 
 function addHygieneEmployeeRow(nameVal = '', index = '') {
