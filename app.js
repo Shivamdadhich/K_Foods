@@ -790,12 +790,6 @@ function saveActiveReport(sheetType, status) {
     localStorage.setItem('kf_qa_logs', JSON.stringify(db.logs));
     updateDashboardStats();
     
-    alert(`Report saved as ${status.toUpperCase()}!`);
-    
-    if (status === 'Final') {
-        window.print();
-    }
-    
     switchView('dashboard');
 }
 
