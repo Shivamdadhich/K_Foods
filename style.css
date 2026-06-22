@@ -442,6 +442,46 @@ body {
     padding: 0;
 }
 
+/* Excel Style Static Tables */
+.excel-table {
+    border: 2px solid #334155 !important;
+}
+.excel-table th {
+    background-color: #f1f5f9 !important;
+    color: #1e293b !important;
+    border: 1px solid #94a3b8 !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    padding: 0.35rem 0.5rem !important;
+    white-space: normal !important;
+    vertical-align: middle !important;
+}
+.excel-table td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 0.2rem 0.3rem !important;
+    font-size: 0.75rem !important;
+}
+.excel-table .input-cell input, .excel-table .input-cell select {
+    padding: 0.25rem 0.35rem !important;
+    font-size: 0.75rem !important;
+    text-align: center !important;
+    border-radius: 0 !important;
+}
+.excel-table .input-cell input[type="number"] {
+    text-align: center !important;
+}
+.excel-table select {
+    appearance: auto !important;
+}
+.bottom-layout-grid h4 {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #1e293b;
+    border-left: 3px solid var(--primary);
+    padding-left: 0.5rem;
+}
+
 .qa-table .input-cell input, .qa-table .input-cell select {
     width: 100%;
     height: 100%;

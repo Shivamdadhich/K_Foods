@@ -263,43 +263,56 @@ function calcNetContentRow(valveNo) {
 
 // 2. Finished Product Online Analysis
 function initFinishedProductTable() {
-    const tbody = document.querySelector('#fp-table tbody');
-    tbody.innerHTML = '';
-    const defaultHours = ["08:00", "10:00", "12:00", "14:00", "16:00"];
-    defaultHours.forEach(time => addFPHourlyRow(time));
+    // Static table in index.html, no need to dynamically append default rows.
+    // We just reset all fields on the static rows to empty/defaults.
+    const inputs = document.querySelectorAll('#fp-table input');
+    inputs.forEach(inp => {
+        if (inp.type === 'time') return; // Keep preset times
+        inp.value = '';
+        inp.parentElement.className = 'input-cell';
+    });
+    const selects = document.querySelectorAll('#fp-table select');
+    selects.forEach(sel => {
+        sel.selectedIndex = 0;
+    });
+
     initFPJarTable();
 }
 
 function initFPJarTable() {
-    const tbody = document.querySelector('#fp-jar-table tbody');
-    if (tbody) {
-        tbody.innerHTML = '';
-        const defaultHours = ["08:00", "10:00", "12:00", "14:00", "16:00"];
-        defaultHours.forEach(time => addFPJarRow(time));
-    }
-}
+    const inputs = document.querySelectorAll('#fp-jar-table input');
+    inputs.forEach(inp => {
+        if (inp.type === 'time') return; // Keep preset times
+        if (inp.className === 'fp-jar-chem' || inp.className === 'fp-jar-hot-chem') {
+            inp.value = 'SU 120';
+        } else if (inp.className === 'fp-jar-cleaning' || inp.className === 'fp-jar-align' || inp.className === 'fp-jar-func' || inp.className === 'fp-jar-interlock') {
+            inp.value = 'OK';
+        } else if (inp.className === 'fp-jar-scrub') {
+            inp.value = 'Done';
+        } else if (inp.className === 'fp-jar-prerinse-jets' || inp.className === 'fp-jar-hot-jets' || inp.className === 'fp-jar-pf1-jets' || inp.className === 'fp-jar-pf2-jets' || inp.className === 'fp-jar-pf3-jets') {
+            inp.value = '2 Jets';
+        } else if (inp.className === 'fp-jar-prerinse-press') {
+            inp.value = '2kg';
+        } else if (inp.className === 'fp-jar-hot-chem-pct') {
+            inp.value = '0.5%';
+        } else if (inp.className === 'fp-jar-hot-press') {
+            inp.value = '2.2kg';
+        } else if (inp.className === 'fp-jar-hot-temp') {
+            inp.value = '55C';
+        } else if (inp.className === 'fp-jar-pf1-press' || inp.className === 'fp-jar-pf2-press' || inp.className === 'fp-jar-pf3-press') {
+            inp.value = '2.1kg';
+        } else if (inp.className === 'fp-jar-stage-time' || inp.className === 'fp-jar-totaltime') {
+            inp.value = '22';
+        } else {
+            inp.value = '';
+        }
+    });
 
-function addFPJarRow(timeVal = '') {
-    if (typeof timeVal !== 'string' || !timeVal.match(/^\d{2}:\d{2}$/)) {
-        timeVal = getCurrentTimeString();
-    }
-    const tbody = document.querySelector('#fp-jar-table tbody');
-    if (!tbody) return;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-        <td class="checkbox-cell">
-            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
-        </td>
-        <td class="input-cell"><input type="time" class="fp-jar-time" value="${timeVal}"></td>
-        <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
-        <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
-        <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
-        <td class="input-cell"><input type="text" class="fp-jar-prerinse" value="2 Jets / 2kg"></td>
-        <td class="input-cell"><input type="text" class="fp-jar-hotwater" value="55C / 0.5%"></td>
-        <td class="input-cell"><input type="text" class="fp-jar-prefinal" value="OK"></td>
-        <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
-    `;
-    tbody.appendChild(tr);
+    // Reset closure table as well
+    const closureInputs = document.querySelectorAll('#fp-closure-table input');
+    closureInputs.forEach(inp => {
+        inp.value = '';
+    });
 }
 
 function addFPHourlyRow(timeVal = '') {
@@ -602,10 +615,32 @@ function saveActiveReport(sheetType, status) {
         const jarChems = Array.from(document.querySelectorAll('.fp-jar-chem')).map(el => el.value);
         const jarCleanings = Array.from(document.querySelectorAll('.fp-jar-cleaning')).map(el => el.value);
         const jarScrubs = Array.from(document.querySelectorAll('.fp-jar-scrub')).map(el => el.value);
-        const jarPreRinses = Array.from(document.querySelectorAll('.fp-jar-prerinse')).map(el => el.value);
-        const jarHotWaters = Array.from(document.querySelectorAll('.fp-jar-hotwater')).map(el => el.value);
-        const jarPreFinals = Array.from(document.querySelectorAll('.fp-jar-prefinal')).map(el => el.value);
+
+        const jarPreRinseJets = Array.from(document.querySelectorAll('.fp-jar-prerinse-jets')).map(el => el.value);
+        const jarPreRinsePress = Array.from(document.querySelectorAll('.fp-jar-prerinse-press')).map(el => el.value);
+        const jarHotJets = Array.from(document.querySelectorAll('.fp-jar-hot-jets')).map(el => el.value);
+        const jarHotChem = Array.from(document.querySelectorAll('.fp-jar-hot-chem')).map(el => el.value);
+        const jarHotChemPct = Array.from(document.querySelectorAll('.fp-jar-hot-chem-pct')).map(el => el.value);
+        const jarHotPress = Array.from(document.querySelectorAll('.fp-jar-hot-press')).map(el => el.value);
+        const jarHotTemp = Array.from(document.querySelectorAll('.fp-jar-hot-temp')).map(el => el.value);
+        const jarPf1Jets = Array.from(document.querySelectorAll('.fp-jar-pf1-jets')).map(el => el.value);
+        const jarPf1Press = Array.from(document.querySelectorAll('.fp-jar-pf1-press')).map(el => el.value);
+        const jarPf2Jets = Array.from(document.querySelectorAll('.fp-jar-pf2-jets')).map(el => el.value);
+        const jarPf2Press = Array.from(document.querySelectorAll('.fp-jar-pf2-press')).map(el => el.value);
+        const jarPf3Jets = Array.from(document.querySelectorAll('.fp-jar-pf3-jets')).map(el => el.value);
+        const jarPf3Press = Array.from(document.querySelectorAll('.fp-jar-pf3-press')).map(el => el.value);
+        
+        const jarStageTimes = Array.from(document.querySelectorAll('.fp-jar-stage-time')).map(el => el.value);
         const jarTotalTimes = Array.from(document.querySelectorAll('.fp-jar-totaltime')).map(el => el.value);
+        
+        const jarAligns = Array.from(document.querySelectorAll('.fp-jar-align')).map(el => el.value);
+        const jarFuncs = Array.from(document.querySelectorAll('.fp-jar-func')).map(el => el.value);
+        const jarInterlocks = Array.from(document.querySelectorAll('.fp-jar-interlock')).map(el => el.value);
+
+        // Closure Table
+        const closureSuppliers = Array.from(document.querySelectorAll('.fp-closure-supplier')).map(el => el.value);
+        const closureMfgDates = Array.from(document.querySelectorAll('.fp-closure-mfg')).map(el => el.value);
+        const closureLots = Array.from(document.querySelectorAll('.fp-closure-lot')).map(el => el.value);
 
         const safetyTank = document.getElementById('fp-safety-tank') ? document.getElementById('fp-safety-tank').checked : false;
         const safetyNozzles = document.getElementById('fp-safety-nozzles') ? document.getElementById('fp-safety-nozzles').checked : false;
@@ -616,7 +651,9 @@ function saveActiveReport(sheetType, status) {
             packSize, chemist, times, ozoneOz, ozoneProd, appearances, odours, tastes, 
             ph, tds, hardness, calciums, magnesiums, colors, finprods, alkalinities, 
             chlorides, sulphates, rfcs, netContents, codings, cableAligns, labelWrinkles, glueStatuses,
-            jarTimes, jarChems, jarCleanings, jarScrubs, jarPreRinses, jarHotWaters, jarPreFinals, jarTotalTimes,
+            jarTimes, jarChems, jarCleanings, jarScrubs, jarPreRinseJets, jarPreRinsePress, jarHotJets, jarHotChem, jarHotChemPct, jarHotPress, jarHotTemp,
+            jarPf1Jets, jarPf1Press, jarPf2Jets, jarPf2Press, jarPf3Jets, jarPf3Press, jarStageTimes, jarTotalTimes, jarAligns, jarFuncs, jarInterlocks,
+            closureSuppliers, closureMfgDates, closureLots,
             safetyTank, safetyNozzles, safetyHopper, safetyChute
         };
         summary = `Online Product Analysis (${status}) by ${chemist || 'Chemist'}`;
@@ -798,55 +835,78 @@ function loadSavedLogIntoForm(log) {
         document.getElementById('fp-pack-size').value = p.packSize || '';
         document.getElementById('fp-chemist').value = p.chemist || '';
         
-        const tbody = document.querySelector('#fp-table tbody');
-        tbody.innerHTML = '';
+        const fpRows = document.querySelectorAll('#fp-table tbody tr');
         p.times.forEach((t, idx) => {
-            addFPHourlyRow(t);
-            const rows = tbody.querySelectorAll('tr');
-            const latestRow = rows[rows.length - 1];
-            latestRow.querySelector('.fp-ozone-oz').value = p.ozoneOz[idx] || '';
-            latestRow.querySelector('.fp-ozone-prod').value = p.ozoneProd[idx] || '';
-            latestRow.querySelector('.fp-appearance').value = p.appearances[idx] || 'Clear';
-            latestRow.querySelector('.fp-odour').value = p.odours[idx] || 'Agreeable';
-            latestRow.querySelector('.fp-taste').value = p.tastes[idx] || 'Agreeable';
-            latestRow.querySelector('.fp-ph').value = p.ph[idx] || '';
-            latestRow.querySelector('.fp-tds').value = p.tds[idx] || '';
-            latestRow.querySelector('.fp-hardness').value = p.hardness[idx] || '';
-            latestRow.querySelector('.fp-calcium').value = p.calciums[idx] || '';
-            latestRow.querySelector('.fp-magnesium').value = p.magnesiums[idx] || '';
-            latestRow.querySelector('.fp-color').value = p.colors[idx] || '';
-            latestRow.querySelector('.fp-finprod').value = p.finprods[idx] || '';
-            latestRow.querySelector('.fp-alkalinity').value = p.alkalinities[idx] || '';
-            latestRow.querySelector('.fp-chloride').value = p.chlorides[idx] || '';
-            latestRow.querySelector('.fp-sulphate').value = p.sulphates[idx] || '';
-            latestRow.querySelector('.fp-rfc').value = p.rfcs[idx] || '';
-            latestRow.querySelector('.fp-net-content').value = p.netContents[idx] || '';
-            latestRow.querySelector('.fp-coding').value = p.codings[idx] || 'Clear';
-            latestRow.querySelector('.fp-cable').value = p.cableAligns[idx] || 'OK';
-            latestRow.querySelector('.fp-wrinkle').value = p.labelWrinkles[idx] || 'No';
-            latestRow.querySelector('.fp-glue').value = p.glueStatuses[idx] || 'OK';
+            const row = fpRows[idx];
+            if (!row) return;
+            row.querySelector('.fp-time').value = t || '';
+            row.querySelector('.fp-ozone-oz').value = p.ozoneOz[idx] || '';
+            row.querySelector('.fp-ozone-prod').value = p.ozoneProd[idx] || '';
+            row.querySelector('.fp-appearance').value = p.appearances[idx] || 'Clear';
+            row.querySelector('.fp-odour').value = p.odours[idx] || 'Agreeable';
+            row.querySelector('.fp-taste').value = p.tastes[idx] || 'Agreeable';
+            row.querySelector('.fp-ph').value = p.ph[idx] || '';
+            row.querySelector('.fp-tds').value = p.tds[idx] || '';
+            row.querySelector('.fp-hardness').value = p.hardness[idx] || '';
+            row.querySelector('.fp-calcium').value = p.calciums[idx] || '';
+            row.querySelector('.fp-magnesium').value = p.magnesiums[idx] || '';
+            row.querySelector('.fp-color').value = p.colors[idx] || '';
+            row.querySelector('.fp-finprod').value = p.finprods[idx] || '';
+            row.querySelector('.fp-alkalinity').value = p.alkalinities[idx] || '';
+            row.querySelector('.fp-chloride').value = p.chlorides[idx] || '';
+            row.querySelector('.fp-sulphate').value = p.sulphates[idx] || '';
+            row.querySelector('.fp-rfc').value = p.rfcs[idx] || '';
+            row.querySelector('.fp-net-content').value = p.netContents[idx] || '';
+            row.querySelector('.fp-coding').value = p.codings[idx] || 'Clear';
+            row.querySelector('.fp-cable').value = p.cableAligns[idx] || 'OK';
+            row.querySelector('.fp-wrinkle').value = p.labelWrinkles[idx] || 'No';
+            row.querySelector('.fp-glue').value = p.glueStatuses[idx] || 'OK';
         });
 
         // Restore Jar washing logs
-        const jarTbody = document.querySelector('#fp-jar-table tbody');
-        if (jarTbody) {
-            jarTbody.innerHTML = '';
-            if (p.jarTimes) {
-                p.jarTimes.forEach((jt, idx) => {
-                    addFPJarRow(jt);
-                    const rows = jarTbody.querySelectorAll('tr');
-                    const latestRow = rows[rows.length - 1];
-                    latestRow.querySelector('.fp-jar-chem').value = p.jarChems[idx] || '';
-                    latestRow.querySelector('.fp-jar-cleaning').value = p.jarCleanings[idx] || '';
-                    latestRow.querySelector('.fp-jar-scrub').value = p.jarScrubs[idx] || '';
-                    latestRow.querySelector('.fp-jar-prerinse').value = p.jarPreRinses[idx] || '';
-                    latestRow.querySelector('.fp-jar-hotwater').value = p.jarHotWaters[idx] || '';
-                    latestRow.querySelector('.fp-jar-prefinal').value = p.jarPreFinals[idx] || '';
-                    latestRow.querySelector('.fp-jar-totaltime').value = p.jarTotalTimes[idx] || '';
-                });
-            } else {
-                initFPJarTable();
-            }
+        const jarRows = document.querySelectorAll('#fp-jar-table tbody tr');
+        if (p.jarTimes) {
+            p.jarTimes.forEach((jt, idx) => {
+                const row = jarRows[idx];
+                if (!row) return;
+                row.querySelector('.fp-jar-time').value = jt || '';
+                row.querySelector('.fp-jar-chem').value = p.jarChems[idx] || '';
+                row.querySelector('.fp-jar-cleaning').value = p.jarCleanings[idx] || '';
+                row.querySelector('.fp-jar-scrub').value = p.jarScrubs[idx] || '';
+
+                if (row.querySelector('.fp-jar-prerinse-jets')) row.querySelector('.fp-jar-prerinse-jets').value = p.jarPreRinseJets[idx] || '';
+                if (row.querySelector('.fp-jar-prerinse-press')) row.querySelector('.fp-jar-prerinse-press').value = p.jarPreRinsePress[idx] || '';
+                if (row.querySelector('.fp-jar-hot-jets')) row.querySelector('.fp-jar-hot-jets').value = p.jarHotJets[idx] || '';
+                if (row.querySelector('.fp-jar-hot-chem')) row.querySelector('.fp-jar-hot-chem').value = p.jarHotChem[idx] || '';
+                if (row.querySelector('.fp-jar-hot-chem-pct')) row.querySelector('.fp-jar-hot-chem-pct').value = p.jarHotChemPct[idx] || '';
+                if (row.querySelector('.fp-jar-hot-press')) row.querySelector('.fp-jar-hot-press').value = p.jarHotPress[idx] || '';
+                if (row.querySelector('.fp-jar-hot-temp')) row.querySelector('.fp-jar-hot-temp').value = p.jarHotTemp[idx] || '';
+                if (row.querySelector('.fp-jar-pf1-jets')) row.querySelector('.fp-jar-pf1-jets').value = p.jarPf1Jets[idx] || '';
+                if (row.querySelector('.fp-jar-pf1-press')) row.querySelector('.fp-jar-pf1-press').value = p.jarPf1Press[idx] || '';
+                if (row.querySelector('.fp-jar-pf2-jets')) row.querySelector('.fp-jar-pf2-jets').value = p.jarPf2Jets[idx] || '';
+                if (row.querySelector('.fp-jar-pf2-press')) row.querySelector('.fp-jar-pf2-press').value = p.jarPf2Press[idx] || '';
+                if (row.querySelector('.fp-jar-pf3-jets')) row.querySelector('.fp-jar-pf3-jets').value = p.jarPf3Jets[idx] || '';
+                if (row.querySelector('.fp-jar-pf3-press')) row.querySelector('.fp-jar-pf3-press').value = p.jarPf3Press[idx] || '';
+                
+                if (row.querySelector('.fp-jar-stage-time')) row.querySelector('.fp-jar-stage-time').value = p.jarStageTimes[idx] || '';
+                row.querySelector('.fp-jar-totaltime').value = p.jarTotalTimes[idx] || '';
+
+                if (row.querySelector('.fp-jar-align')) row.querySelector('.fp-jar-align').value = p.jarAligns[idx] || '';
+                if (row.querySelector('.fp-jar-func')) row.querySelector('.fp-jar-func').value = p.jarFuncs[idx] || '';
+                if (row.querySelector('.fp-jar-interlock')) row.querySelector('.fp-jar-interlock').value = p.jarInterlocks[idx] || '';
+            });
+        }
+
+        // Restore Closure Details
+        const closureRows = document.querySelectorAll('#fp-closure-table tbody tr');
+        if (p.closureSuppliers) {
+            p.closureSuppliers.forEach((cs, idx) => {
+                const row = closureRows[idx];
+                if (!row) return;
+                row.querySelector('.fp-closure-supplier').value = cs || '';
+                row.querySelector('.fp-closure-mfg').value = p.closureMfgDates[idx] || '';
+                row.querySelector('.fp-closure-lot').value = p.closureLots[idx] || '';
+            });
         }
 
         // Restore checkboxes
@@ -1132,72 +1192,165 @@ function generateConsolidatedReport() {
         else if (log.type === 'finishedproduct') {
             dynamicHtml += `
                 <p><strong>Pack Size:</strong> ${p.packSize} | <strong>Line Chemist:</strong> ${p.chemist}</p>
-                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Online Quality Parameters</h5>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Online Quality Parameters (Finished Product)</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; margin-top: 0.2rem; margin-bottom: 1rem;">
                     <thead>
                         <tr style="background: #f8fafc;">
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Time</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Oz Oz</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Oz Prod</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">pH</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">TDS</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Ca</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Mg</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Alkalinity</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Chloride</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Time</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Oz Oz</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Oz Prod</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">App</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Odour</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Taste</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">pH</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">TDS</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Hard</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Ca</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Mg</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Col</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Fin</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Alk</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Chl</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Sul</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">RFC</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Net</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Coding</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Align</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Wrink</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Glue</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${p.times.map((t, idx) => `
                             <tr>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${t}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ozoneOz[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ozoneProd[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.ph[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.tds[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.calciums[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.magnesiums[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.alkalinities[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.chlorides[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${t}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.ozoneOz[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.ozoneProd[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.appearances[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.odours[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.tastes[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.ph[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.tds[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.hardness[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.calciums[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.magnesiums[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.colors[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.finprods[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.alkalinities[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.chlorides[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.sulphates[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.rfcs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.netContents[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.codings[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.cableAligns[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.labelWrinkles[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.glueStatuses[idx] || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Jar Washing & Sanitation Logs</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.55rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th rowspan="2" style="border: 1px solid #cbd5e1; padding: 2px;">Time</th>
+                            <th colspan="3" style="border: 1px solid #cbd5e1; padding: 2px;">External</th>
+                            <th colspan="2" style="border: 1px solid #cbd5e1; padding: 2px;">Pre Rinse</th>
+                            <th colspan="4" style="border: 1px solid #cbd5e1; padding: 2px;">Hot Water & Chem</th>
+                            <th colspan="2" style="border: 1px solid #cbd5e1; padding: 2px;">PF 1</th>
+                            <th colspan="2" style="border: 1px solid #cbd5e1; padding: 2px;">PF 2</th>
+                            <th colspan="2" style="border: 1px solid #cbd5e1; padding: 2px;">PF 3</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Stage</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Total</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Align</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Func</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Lock</th>
+                        </tr>
+                        <tr style="background: #f8fafc;">
+                            <th>Chem</th>
+                            <th>Clean</th>
+                            <th>Scrub</th>
+                            <th>Jets</th>
+                            <th>Pres</th>
+                            <th>Chem</th>
+                            <th>%</th>
+                            <th>Pres</th>
+                            <th>Temp</th>
+                            <th>Jets</th>
+                            <th>Pres</th>
+                            <th>Jets</th>
+                            <th>Pres</th>
+                            <th>Jets</th>
+                            <th>Pres</th>
+                            <th>Sec</th>
+                            <th>Sec</th>
+                            <th>Jet</th>
+                            <th>Jets</th>
+                            <th>Pres</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${p.jarTimes.map((jt, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${jt}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarChems[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarCleanings[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarScrubs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPreRinseJets[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPreRinsePress[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarHotChem[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarHotChemPct[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarHotPress[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarHotTemp[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPf1Jets[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPf1Press[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPf2Jets[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPf2Press[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPf3Jets[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarPf3Press[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarStageTimes[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarTotalTimes[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarAligns[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarFuncs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.jarInterlocks[idx] || '-'}</td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
             `;
 
-            if (p.jarTimes) {
+            if (p.closureSuppliers) {
                 dynamicHtml += `
-                    <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Jar Washing & Sanitation Logs</h5>
+                    <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Closure / Material Details</h5>
                     <table style="width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.2rem; margin-bottom: 1rem;">
                         <thead>
                             <tr style="background: #f8fafc;">
-                                <th rowspan="2" style="border: 1px solid #cbd5e1; padding: 4px;">Time</th>
-                                <th colspan="3" style="border: 1px solid #cbd5e1; padding: 4px;">Jar External Washing</th>
-                                <th colspan="4" style="border: 1px solid #cbd5e1; padding: 4px;">Jar Internal Rinsing</th>
-                            </tr>
-                            <tr style="background: #f8fafc;">
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Chem</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Clean</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Scrub</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Pre-Rinse</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Hot Water</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Pre-Final</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Time (s)</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Material</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Supplier</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Mfg Date</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Lot No.</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${p.jarTimes.map((jt, idx) => `
-                                <tr>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${jt}</td>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarChems[idx] || '-'}</td>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarCleanings[idx] || '-'}</td>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarScrubs[idx] || '-'}</td>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarPreRinses[idx] || '-'}</td>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarHotWaters[idx] || '-'}</td>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.jarPreFinals[idx] || '-'}</td>
-                                    <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.jarTotalTimes[idx] || '-'}</td>
-                                </tr>
-                            `).join('')}
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Closure</strong></td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureSuppliers[0] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureMfgDates[0] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureLots[0] || '-'}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Jar</strong></td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureSuppliers[1] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureMfgDates[1] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureLots[1] || '-'}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Shrink Film</strong></td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureSuppliers[2] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureMfgDates[2] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureLots[2] || '-'}</td>
+                            </tr>
                         </tbody>
                     </table>
                 `;

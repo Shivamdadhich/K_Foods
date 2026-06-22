@@ -320,11 +320,10 @@
 
                     <h4>Finished Product Online Quality Parameters</h4>
                     <div class="table-container">
-                        <table class="qa-table" id="fp-table">
+                        <table class="qa-table excel-table" id="fp-table">
                             <thead>
                                 <tr>
-                                    <th>Action</th>
-                                    <th>Time</th>
+                                    <th style="min-width: 80px;">Time</th>
                                     <th>Ozone in Ozonator (0.4-0.6ppm)</th>
                                     <th>Ozone Product (0.2-0.4ppm)</th>
                                     <th>Appearance (Clear)</th>
@@ -332,62 +331,708 @@
                                     <th>Taste (Agreeable)</th>
                                     <th>pH (6.0-8.5)</th>
                                     <th>TDS (100-125ppm)</th>
-                                    <th>Hardness (Min 11ppm)</th>
+                                    <th>Total Hardness</th>
                                     <th>Calcium (Min 11ppm)</th>
                                     <th>Magnesium (Min 6ppm)</th>
                                     <th>Color (Max 2TCU)</th>
                                     <th>Finished Prod (Max 2TCU)</th>
-                                    <th>Alkalinity (Max 200)</th>
+                                    <th>Total Alkalinity</th>
                                     <th>Chloride (Max 200)</th>
                                     <th>Sulphate (Max 200)</th>
                                     <th>RFC (Max 0.2ppm)</th>
                                     <th>Net Content</th>
-                                    <th>Date Coding</th>
-                                    <th>Cable Align</th>
+                                    <th>Primary Date Coding</th>
+                                    <th>Cabel Alignment</th>
                                     <th>Label Wrinkle</th>
                                     <th>Glue Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Hourly rows -->
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="08:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="10:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="12:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="14:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="16:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="18:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="20:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="22:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="00:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="02:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="04:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-time" value="06:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-oz" placeholder="0.5" oninput="validateFP(this, 0.4, 0.6)"></td>
+                                    <td class="input-cell"><input type="number" step="0.01" class="fp-ozone-prod" placeholder="0.3" oninput="validateFP(this, 0.2, 0.4)"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-appearance"><option value="Clear">Clear</option><option value="Turbid">Turbid</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-odour"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-taste"><option value="Agreeable">Agreeable</option><option value="Not Agreeable">Not Agreeable</option></select>
+                                    </td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="fp-ph" placeholder="7.0" oninput="validateFP(this, 6.0, 8.5)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-tds" placeholder="110" oninput="validateFP(this, 100, 125)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-hardness" placeholder="15" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-calcium" placeholder="12" oninput="validateFP(this, 11, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-magnesium" placeholder="8" oninput="validateFP(this, 6, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-color" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-finprod" placeholder="1" oninput="validateFP(this, 0, 2)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-alkalinity" placeholder="150" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-chloride" placeholder="120" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="1" class="fp-sulphate" placeholder="80" oninput="validateFP(this, 0, 200)"></td>
+                                    <td class="input-cell"><input type="number" step="0.05" class="fp-rfc" placeholder="0.1" oninput="validateFP(this, 0, 0.2)"></td>
+                                    <td class="input-cell"><input type="text" class="fp-net-content" placeholder="OK"></td>
+                                    <td class="input-cell">
+                                        <select class="fp-coding"><option value="Clear">Clear</option><option value="Smudged">Smudged</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-cable"><option value="OK">OK</option><option value="Misaligned">Misaligned</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-wrinkle"><option value="No">No</option><option value="Yes">Yes</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="fp-glue"><option value="OK">OK</option><option value="Bad">Bad</option></select>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button class="btn btn-secondary" onclick="addFPHourlyRow()">+ Add Hourly Entry</button>
 
                     <h4 style="margin-top: 1.5rem;">Jar Washing & Sanitation Logs (Startup to two hourly)</h4>
                     <div class="table-container">
-                        <table class="qa-table" id="fp-jar-table">
+                        <table class="qa-table excel-table" id="fp-jar-table">
                             <thead>
                                 <tr>
-                                    <th rowspan="2">Action</th>
-                                    <th rowspan="2">Time</th>
-                                    <th colspan="3">Jar External Washing</th>
-                                    <th colspan="4">Jar Internal Rinsing (Pressure > 2kg/cm², Time > 20s)</th>
+                                    <th rowspan="3" style="min-width: 80px;">Time</th>
+                                    <th rowspan="2" colspan="3">Jar External Washing</th>
+                                    <th colspan="12">Jar Internal Rinsing (Pressure - Min 2kg/cm2, Rinsing Time - Min 20 sec)</th>
+                                    <th rowspan="3">Each Stage Rinsing Time (Sec.)</th>
+                                    <th rowspan="3">Total Rinsing Time (Sec.)</th>
+                                    <th rowspan="3">Centralized alignment of Rinsing Jet</th>
+                                    <th rowspan="3">Functioning of all Rinsing Jets</th>
+                                    <th rowspan="3">Temp/Pressure and Pressure Interlock</th>
                                 </tr>
                                 <tr>
-                                    <th>Chemical (0.5-1%)</th>
-                                    <th>Physical Cleaning</th>
-                                    <th>Scrubbing/Rinsing</th>
-                                    <th>Pre Rinse</th>
-                                    <th>Hot Water (50-60°C)</th>
-                                    <th>Pre Final</th>
-                                    <th>Total Time (s)</th>
+                                    <th colspan="2">Pre Rinse</th>
+                                    <th colspan="4">Hot Water (50-60C) & Chemical Rinse (0.5-1%)</th>
+                                    <th colspan="2">Pre Final</th>
+                                    <th colspan="2">Pre Final</th>
+                                    <th colspan="2">Pre Final</th>
+                                </tr>
+                                <tr>
+                                    <th>Chemical 0.5-1%</th>
+                                    <th>Cleaning of Jar</th>
+                                    <th>Scrubbing & Rinsing Time</th>
+                                    <th>No. of Rinsing Jets</th>
+                                    <th>Pressure Kg/cm2</th>
+                                    <th>Chemical</th>
+                                    <th>% Chemical</th>
+                                    <th>Pressure Kg/cm2</th>
+                                    <th>Temp C</th>
+                                    <th>No. of Rinsing Jets</th>
+                                    <th>Pressure Kg/cm2</th>
+                                    <th>No. of Rinsing Jets</th>
+                                    <th>Pressure Kg/cm2</th>
+                                    <th>No. of Rinsing Jets</th>
+                                    <th>Pressure Kg/cm2</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Dynamic rows -->
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-jar-time" value="08:00"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-press" value="2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem-pct" value="0.5%"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-press" value="2.2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-temp" value="55C"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-stage-time" value="22"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-align" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-func" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-interlock" value="OK"></td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-jar-time" value="10:00"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-press" value="2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem-pct" value="0.5%"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-press" value="2.2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-temp" value="55C"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-stage-time" value="22"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-align" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-func" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-interlock" value="OK"></td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-jar-time" value="12:00"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-press" value="2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem-pct" value="0.5%"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-press" value="2.2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-temp" value="55C"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-stage-time" value="22"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-align" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-func" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-interlock" value="OK"></td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-jar-time" value="14:00"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-press" value="2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem-pct" value="0.5%"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-press" value="2.2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-temp" value="55C"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-stage-time" value="22"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-align" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-func" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-interlock" value="OK"></td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-jar-time" value="16:00"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-press" value="2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem-pct" value="0.5%"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-press" value="2.2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-temp" value="55C"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-stage-time" value="22"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-align" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-func" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-interlock" value="OK"></td>
+                                </tr>
+                                <tr>
+                                    <td class="input-cell"><input type="time" class="fp-jar-time" value="18:00"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-cleaning" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-scrub" value="Done"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-prerinse-press" value="2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem" value="SU 120"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-chem-pct" value="0.5%"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-press" value="2.2kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-hot-temp" value="55C"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf1-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf2-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-jets" value="2 Jets"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-pf3-press" value="2.1kg"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-stage-time" value="22"></td>
+                                    <td class="input-cell"><input type="number" class="fp-jar-totaltime" value="22"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-align" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-func" value="OK"></td>
+                                    <td class="input-cell"><input type="text" class="fp-jar-interlock" value="OK"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button class="btn btn-secondary" onclick="addFPJarRow()">+ Add Jar Wash Entry</button>
 
-                    <h4 style="margin-top: 1.5rem;">Start-up & Changeover Safety Activities</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-tank" checked> Jar washer tank inside cleaning</label>
-                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-nozzles" checked> Jet nozzles cleaning</label>
-                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-hopper" checked> Capper hopper cleaning (70% Alcohol)</label>
-                        <label class="checkbox-cell"><input type="checkbox" id="fp-safety-chute" checked> Capper chute cleaning (70% IPA)</label>
+                    <div class="bottom-layout-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <h4>Closure Details</h4>
+                            <table class="qa-table excel-table" id="fp-closure-table">
+                                <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Supplier</th>
+                                        <th>Mfg. Date</th>
+                                        <th>Lot No.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Closure</strong></td>
+                                        <td class="input-cell"><input type="text" class="fp-closure-supplier" placeholder="Supplier Name"></td>
+                                        <td class="input-cell"><input type="date" class="fp-closure-mfg"></td>
+                                        <td class="input-cell"><input type="text" class="fp-closure-lot" placeholder="Lot No."></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Jar</strong></td>
+                                        <td class="input-cell"><input type="text" class="fp-closure-supplier" placeholder="Supplier Name"></td>
+                                        <td class="input-cell"><input type="date" class="fp-closure-mfg"></td>
+                                        <td class="input-cell"><input type="text" class="fp-closure-lot" placeholder="Lot No."></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Shrink Film</strong></td>
+                                        <td class="input-cell"><input type="text" class="fp-closure-supplier" placeholder="Supplier Name"></td>
+                                        <td class="input-cell"><input type="date" class="fp-closure-mfg"></td>
+                                        <td class="input-cell"><input type="text" class="fp-closure-lot" placeholder="Lot No."></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <h4>Start-up & Changeover Safety Activities</h4>
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 0.75rem; background: var(--bg-main); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                                <label class="checkbox-cell" style="margin: 0;"><input type="checkbox" id="fp-safety-tank" checked> Jar washer tank Inside cleaning</label>
+                                <label class="checkbox-cell" style="margin: 0;"><input type="checkbox" id="fp-safety-nozzles" checked> Jet Nozzles Cleaning</label>
+                                <label class="checkbox-cell" style="margin: 0;"><input type="checkbox" id="fp-safety-hopper" checked> Capper hopper cleaning with 70% Alcohol</label>
+                                <label class="checkbox-cell" style="margin: 0;"><input type="checkbox" id="fp-safety-chute" checked> Capper chute Cleaning with 70% IPA</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="btn-group">
