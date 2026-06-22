@@ -440,23 +440,12 @@ function addLightInspectionRow(timeVal = '') {
     tbody.appendChild(tr);
 }
 
-// // 5. WTP Operator / Log Report
+// 5. WTP Operator / Log Report
 function initWTPTable() {
-    const inputs = document.querySelectorAll('#wtp-table-logs input');
-    inputs.forEach(inp => {
-        if (inp.type === 'time') return; // Keep standard shift hour
-        if (inp.className === 'wtp-src-ph') inp.value = '7.2';
-        else if (inp.className === 'wtp-src-tds') inp.value = '350';
-        else if (inp.className === 'wtp-psf') inp.value = '0.2';
-        else if (inp.className === 'wtp-acf-in') inp.value = '2PPM';
-        else if (inp.className === 'wtp-acf-out') inp.value = 'NIL';
-        else if (inp.className === 'wtp-ro-flow') inp.value = '12';
-        else if (inp.className === 'wtp-ro-ph') inp.value = '7.1';
-        else if (inp.className === 'wtp-ro-tds') inp.value = '110';
-        else if (inp.className === 'wtp-perm-tds') inp.value = '12';
-        else inp.value = '';
-        inp.parentElement.className = 'input-cell';
-    });
+    const tbody = document.querySelector('#wtp-table-logs tbody');
+    tbody.innerHTML = '';
+    addWTPLogRow("08:00");
+    addWTPLogRow("12:00");
 
     document.getElementById('wtp-chem-1').value = 'Chlorine';
     document.getElementById('wtp-supplier-1').value = '';
@@ -467,7 +456,26 @@ function initWTPTable() {
 }
 
 function addWTPLogRow(timeVal = '') {
-    // Deprecated for static spreadsheet, kept empty to avoid runtime errors
+    if (typeof timeVal !== 'string' || !timeVal.match(/^\d{2}:\d{2}$/)) {
+        timeVal = getCurrentTimeString();
+    }
+    const tbody = document.querySelector('#wtp-table-logs tbody');
+    const idx = tbody.querySelectorAll('tr').length + 1;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td style="text-align: center; font-weight: bold;">${idx}</td>
+        <td class="input-cell"><input type="time" class="wtp-time" value="${timeVal}"></td>
+        <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+        <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+        <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+        <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+        <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+        <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+        <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+        <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+        <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+    `;
+    tbody.appendChild(tr);
 }
 
 function validateWTP(input, maxVal) {
@@ -539,22 +547,30 @@ function addDispatchRow() {
 
 // 8. Hygiene
 function initHygieneTable() {
-    const defaultNames = ["Ramesh Kumar", "Suresh Patil", "Anil Shinde", "Sunil Pawar", "Amit Mishra", "Rajesh Sharma", "Vijay Singh", "Sanjay Yadav", "Ajay Gupta", "Vikas Verma", "Sandeep Kumar", "Deepak Maurya", "Manoj Joshi", "Sunil Yadav", "Rohit Shinde"];
-    const rows = document.querySelectorAll('#hyg-table tbody tr');
-    rows.forEach((row, idx) => {
-        const nameInput = row.querySelector('.hyg-name');
-        if (nameInput) nameInput.value = defaultNames[idx] || '';
-        
-        row.querySelectorAll('input[type="checkbox"]').forEach(chk => {
-            chk.checked = true;
-        });
-    });
-    const supervisorInput = document.getElementById('hyg-supervisor');
-    if (supervisorInput) supervisorInput.value = '';
+    const tbody = document.querySelector('#hyg-table tbody');
+    tbody.innerHTML = '';
+    const initialStaff = ["Ramesh Kumar", "Suresh Patil", "Anil Shinde", "Sunil Pawar"];
+    initialStaff.forEach((name, idx) => addHygieneEmployeeRow(name, idx + 1));
 }
 
 function addHygieneEmployeeRow(nameVal = '', index = '') {
-    // Deprecated for static spreadsheet, kept empty to avoid runtime errors
+    const tbody = document.querySelector('#hyg-table tbody');
+    const tr = document.createElement('tr');
+    const idx = index || (tbody.querySelectorAll('tr').length + 1);
+    tr.innerHTML = `
+        <td style="text-align: center; font-weight: bold;">${idx}</td>
+        <td class="input-cell"><input type="text" class="hyg-name" value="${nameVal}" placeholder="Employee Name"></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+        <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+    `;
+    tbody.appendChild(tr);
 }
 
 // Universal Save Flow
@@ -926,35 +942,23 @@ function loadSavedLogIntoForm(log) {
     else if (log.type === 'wtp') {
         document.getElementById('wtp-operator').value = p.operator || '';
         document.getElementById('wtp-chemist').value = p.chemist || '';
-        const rows = document.querySelectorAll('#wtp-table-logs tbody tr');
-        rows.forEach((row, idx) => {
-            if (idx >= p.times.length) {
-                row.querySelector('.wtp-time').value = '';
-                row.querySelector('.wtp-src-ph').value = '';
-                row.querySelector('.wtp-src-tds').value = '';
-                row.querySelector('.wtp-psf').value = '';
-                row.querySelector('.wtp-acf-in').value = '';
-                row.querySelector('.wtp-acf-out').value = '';
-                row.querySelector('.wtp-ro-flow').value = '';
-                row.querySelector('.wtp-ro-ph').value = '';
-                row.querySelector('.wtp-ro-tds').value = '';
-                row.querySelector('.wtp-perm-tds').value = '';
-                row.querySelector('.wtp-psf').parentElement.className = 'input-cell';
-                row.querySelector('.wtp-perm-tds').parentElement.className = 'input-cell';
-                return;
-            }
-            row.querySelector('.wtp-time').value = p.times[idx] || '';
-            row.querySelector('.wtp-src-ph').value = p.srcPhs[idx] || '';
-            row.querySelector('.wtp-src-tds').value = p.srcTdss[idx] || '';
-            row.querySelector('.wtp-psf').value = p.psfs[idx] || '';
-            row.querySelector('.wtp-acf-in').value = p.acfIns[idx] || '';
-            row.querySelector('.wtp-acf-out').value = p.acfOuts[idx] || '';
-            row.querySelector('.wtp-ro-flow').value = p.roFlows[idx] || '';
-            row.querySelector('.wtp-ro-ph').value = p.roPhs[idx] || '';
-            row.querySelector('.wtp-ro-tds').value = p.roTdss[idx] || '';
-            row.querySelector('.wtp-perm-tds').value = p.permTdss[idx] || '';
-            validateWTP(row.querySelector('.wtp-psf'), 1.0);
-            validateWTP(row.querySelector('.wtp-perm-tds'), 20);
+        const tbody = document.querySelector('#wtp-table-logs tbody');
+        tbody.innerHTML = '';
+        p.times.forEach((t, idx) => {
+            addWTPLogRow(t);
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.wtp-src-ph').value = p.srcPhs[idx] || '';
+            latestRow.querySelector('.wtp-src-tds').value = p.srcTdss[idx] || '';
+            latestRow.querySelector('.wtp-psf').value = p.psfs[idx] || '';
+            latestRow.querySelector('.wtp-acf-in').value = p.acfIns[idx] || '';
+            latestRow.querySelector('.wtp-acf-out').value = p.acfOuts[idx] || '';
+            latestRow.querySelector('.wtp-ro-flow').value = p.roFlows[idx] || '';
+            latestRow.querySelector('.wtp-ro-ph').value = p.roPhs[idx] || '';
+            latestRow.querySelector('.wtp-ro-tds').value = p.roTdss[idx] || '';
+            latestRow.querySelector('.wtp-perm-tds').value = p.permTdss[idx] || '';
+            validateWTP(latestRow.querySelector('.wtp-psf'), 1.0);
+            validateWTP(latestRow.querySelector('.wtp-perm-tds'), 20);
         });
         if (p.dosing) {
             document.getElementById('wtp-chem-1').value = p.dosing.chem || '';
@@ -1020,31 +1024,21 @@ function loadSavedLogIntoForm(log) {
     }
     else if (log.type === 'hygiene') {
         document.getElementById('hyg-supervisor').value = p.supervisor || '';
-        const rows = document.querySelectorAll('#hyg-table tbody tr');
-        rows.forEach((row, idx) => {
-            if (idx >= p.names.length) {
-                row.querySelector('.hyg-name').value = '';
-                row.querySelector('.hyg-fever').checked = true;
-                row.querySelector('.hyg-nose').checked = true;
-                row.querySelector('.hyg-mask').checked = true;
-                row.querySelector('.hyg-cap').checked = true;
-                row.querySelector('.hyg-trimmed').checked = true;
-                row.querySelector('.hyg-wounds').checked = true;
-                row.querySelector('.hyg-smoking').checked = true;
-                row.querySelector('.hyg-flowers').checked = true;
-                row.querySelector('.hyg-jewell').checked = true;
-                return;
-            }
-            row.querySelector('.hyg-name').value = p.names[idx] || '';
-            row.querySelector('.hyg-fever').checked = p.fevers[idx] !== false;
-            row.querySelector('.hyg-nose').checked = p.noses[idx] !== false;
-            row.querySelector('.hyg-mask').checked = p.masks[idx] !== false;
-            row.querySelector('.hyg-cap').checked = p.caps[idx] !== false;
-            row.querySelector('.hyg-trimmed').checked = p.trimmeds[idx] !== false;
-            row.querySelector('.hyg-wounds').checked = p.wounds[idx] !== false;
-            row.querySelector('.hyg-smoking').checked = p.smokings[idx] !== false;
-            row.querySelector('.hyg-flowers').checked = p.flowers[idx] !== false;
-            row.querySelector('.hyg-jewell').checked = p.jewells[idx] !== false;
+        const tbody = document.querySelector('#hyg-table tbody');
+        tbody.innerHTML = '';
+        p.names.forEach((name, idx) => {
+            addHygieneEmployeeRow(name, idx + 1);
+            const rows = tbody.querySelectorAll('tr');
+            const latestRow = rows[rows.length - 1];
+            latestRow.querySelector('.hyg-fever').checked = p.fevers[idx] !== false;
+            latestRow.querySelector('.hyg-nose').checked = p.noses[idx] !== false;
+            latestRow.querySelector('.hyg-mask').checked = p.masks[idx] !== false;
+            latestRow.querySelector('.hyg-cap').checked = p.caps[idx] !== false;
+            latestRow.querySelector('.hyg-trimmed').checked = p.trimmeds[idx] !== false;
+            latestRow.querySelector('.hyg-wounds').checked = p.wounds[idx] !== false;
+            latestRow.querySelector('.hyg-smoking').checked = p.smokings[idx] !== false;
+            latestRow.querySelector('.hyg-flowers').checked = p.flowers[idx] !== false;
+            latestRow.querySelector('.hyg-jewell').checked = p.jewells[idx] !== false;
         });
     }
 }
