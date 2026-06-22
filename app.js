@@ -445,7 +445,6 @@ function initWTPTable() {
     const tbody = document.querySelector('#wtp-table-logs tbody');
     tbody.innerHTML = '';
     addWTPLogRow("08:00");
-    addWTPLogRow("12:00");
 
     document.getElementById('wtp-chem-1').value = 'Chlorine';
     document.getElementById('wtp-supplier-1').value = '';
@@ -549,8 +548,7 @@ function addDispatchRow() {
 function initHygieneTable() {
     const tbody = document.querySelector('#hyg-table tbody');
     tbody.innerHTML = '';
-    const initialStaff = ["Ramesh Kumar", "Suresh Patil", "Anil Shinde", "Sunil Pawar"];
-    initialStaff.forEach((name, idx) => addHygieneEmployeeRow(name, idx + 1));
+    addHygieneEmployeeRow("Ramesh Kumar", 1);
 }
 
 function addHygieneEmployeeRow(nameVal = '', index = '') {
