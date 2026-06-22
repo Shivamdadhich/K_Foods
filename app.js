@@ -183,6 +183,20 @@ function resetFormById(type) {
     } else if (type === 'hygiene') {
         initHygieneTable();
     }
+
+    // Enable and restore buttons
+    const activeSection = document.getElementById(`${type}-view`);
+    if (activeSection) {
+        const submitBtn = Array.from(activeSection.querySelectorAll('button')).find(btn => btn.textContent.includes('Submit') || btn.textContent.includes('Submitted'));
+        if (submitBtn) {
+            submitBtn.textContent = 'Submit (Final)';
+            submitBtn.disabled = false;
+        }
+        const draftBtn = Array.from(activeSection.querySelectorAll('button')).find(btn => btn.textContent.includes('Draft'));
+        if (draftBtn) {
+            draftBtn.disabled = false;
+        }
+    }
 }
 
 function resetAllForms() {
@@ -790,8 +804,19 @@ function saveActiveReport(sheetType, status) {
     localStorage.setItem('kf_qa_logs', JSON.stringify(db.logs));
     updateDashboardStats();
     renderArchives();
-    
-    switchView('archives');
+
+    // Find the submit button in the active view and change its text to 'Submitted'
+    const activeSection = document.querySelector('.view-section.active');
+    if (activeSection) {
+        const submitBtn = Array.from(activeSection.querySelectorAll('button')).find(btn => btn.textContent.includes('Submit'));
+        if (submitBtn) {
+            submitBtn.textContent = 'Submitted';
+            submitBtn.disabled = true;
+            // Also disable any draft button in the same group to prevent further modifications
+            const draftBtn = Array.from(activeSection.querySelectorAll('button')).find(btn => btn.textContent.includes('Draft'));
+            if (draftBtn) draftBtn.disabled = true;
+        }
+    }
 }
 
 // Load draft data back into DOM
