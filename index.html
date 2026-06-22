@@ -1157,28 +1157,182 @@
 
                     <h4>Source Water & RO Filtration Logs</h4>
                     <div class="table-container">
-                        <table class="qa-table" id="wtp-table-logs">
+                        <table class="excel-table" id="wtp-table-logs">
                             <thead>
                                 <tr>
-                                    <th>Action</th>
-                                    <th>Time</th>
-                                    <th>Source pH (6.5-8.5)</th>
-                                    <th>Source TDS</th>
-                                    <th>PSF Outlet Turbidity (&lt;1 NTU)</th>
-                                    <th>ACF Inlet (REF 2PPM)</th>
-                                    <th>ACF Outlet (TC NIL)</th>
-                                    <th>RO Feed Flow (KLPH)</th>
-                                    <th>RO Feed pH</th>
-                                    <th>RO Feed TDS</th>
-                                    <th>RO Permeate TDS (&lt;20 ppm)</th>
+                                    <th style="width: 5%;">Sr.</th>
+                                    <th style="width: 10%;">Time</th>
+                                    <th style="width: 9%;">Source pH (6.5-8.5)</th>
+                                    <th style="width: 9%;">Source TDS</th>
+                                    <th style="width: 10%;">PSF Outlet Turbidity (&lt;1 NTU)</th>
+                                    <th style="width: 9%;">ACF Inlet (REF 2PPM)</th>
+                                    <th style="width: 9%;">ACF Outlet (TC NIL)</th>
+                                    <th style="width: 9%;">RO Feed Flow (KLPH)</th>
+                                    <th style="width: 9%;">RO Feed pH</th>
+                                    <th style="width: 9%;">RO Feed TDS</th>
+                                    <th style="width: 12%;">RO Permeate TDS (&lt;20 ppm)</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Logs -->
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">1</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="08:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">2</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="09:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">3</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="10:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">4</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="11:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">5</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="12:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">6</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="13:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">7</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="14:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">8</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="15:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">9</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="16:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">10</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="17:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">11</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="18:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">12</td>
+                                    <td class="input-cell"><input type="time" class="wtp-time" value="19:00"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
+                                    <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
+                                    <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
+                                    <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button class="btn btn-secondary" onclick="addWTPLogRow()">+ Add Hourly WTP Log</button>
 
                     <h4 style="margin-top: 1.5rem;">Back Wash & Chemical Dosing Activities</h4>
                     <div class="table-container">
@@ -1225,7 +1379,7 @@
                     </div>
 
                     <div class="table-container">
-                        <table class="qa-table" id="minerals-table">
+                        <table class="qa-table excel-table" id="minerals-table">
                             <thead>
                                 <tr>
                                     <th>Mineral Type</th>
@@ -1324,82 +1478,195 @@
                     </div>
 
                     <div class="table-container">
-                        <table class="qa-table" id="veh-table">
+                        <table class="qa-table excel-table" id="veh-table">
                             <thead>
                                 <tr>
-                                    <th>Checklist Parameter</th>
-                                    <th>Vehicle A</th>
-                                    <th>Vehicle B</th>
-                                    <th>Vehicle C</th>
-                                    <th>Vehicle D</th>
+                                    <th style="width: 5%;">Sr. No.</th>
+                                    <th style="width: 25%;">Parameter / Vehicle</th>
+                                    <th>Veh 1</th>
+                                    <th>Veh 2</th>
+                                    <th>Veh 3</th>
+                                    <th>Veh 4</th>
+                                    <th>Veh 5</th>
+                                    <th>Veh 6</th>
+                                    <th>Veh 7</th>
+                                    <th>Veh 8</th>
+                                    <th>Veh 9</th>
+                                    <th>Veh 10</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>1</td>
                                     <td><strong>Vehicle No.</strong></td>
-                                    <td class="input-cell"><input type="text" id="veh-no-a" placeholder="MH-12-XX-XXXX"></td>
-                                    <td class="input-cell"><input type="text" id="veh-no-b"></td>
-                                    <td class="input-cell"><input type="text" id="veh-no-c"></td>
-                                    <td class="input-cell"><input type="text" id="veh-no-d"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no" placeholder="e.g. MH-12-XX-1234"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
+                                    <td class="input-cell"><input type="text" class="veh-no"></td>
                                 </tr>
                                 <tr>
+                                    <td>2</td>
                                     <td><strong>Destination</strong></td>
-                                    <td class="input-cell"><input type="text" id="veh-dest-a"></td>
-                                    <td class="input-cell"><input type="text" id="veh-dest-b"></td>
-                                    <td class="input-cell"><input type="text" id="veh-dest-c"></td>
-                                    <td class="input-cell"><input type="text" id="veh-dest-d"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
+                                    <td class="input-cell"><input type="text" class="veh-dest"></td>
                                 </tr>
                                 <tr>
+                                    <td>3</td>
                                     <td><strong>Dry, Clean & Hygienic?</strong></td>
                                     <td class="input-cell">
-                                        <select id="veh-clean-a"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-clean-b"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-clean-c"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-clean-d"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-clean"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>4</td>
                                     <td><strong>Free from obnoxious odour?</strong></td>
                                     <td class="input-cell">
-                                        <select id="veh-odour-a"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-odour-b"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-odour-c"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-odour-d"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-odour"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>5</td>
                                     <td><strong>Has Tarpaulin roof cover?</strong></td>
                                     <td class="input-cell">
-                                        <select id="veh-tarp-a"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-tarp-b"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-tarp-c"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                     <td class="input-cell">
-                                        <select id="veh-tarp-d"><option value="Yes">Yes (Pass)</option><option value="No">No (Fail)</option></select>
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
+                                    </td>
+                                    <td class="input-cell">
+                                        <select class="veh-tarp"><option value="Yes">Yes</option><option value="No">No</option></select>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Remark / Inspector</strong></td>
-                                    <td class="input-cell"><input type="text" id="veh-rem-a"></td>
-                                    <td class="input-cell"><input type="text" id="veh-rem-b"></td>
-                                    <td class="input-cell"><input type="text" id="veh-rem-c"></td>
-                                    <td class="input-cell"><input type="text" id="veh-rem-d"></td>
+                                    <td>-</td>
+                                    <td><strong>Remark (if any)</strong></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                    <td class="input-cell"><input type="text" class="veh-remark"></td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td><strong>Vehicle Inspected by</strong></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                    <td class="input-cell"><input type="text" class="veh-inspected-by"></td>
+                                </tr>
+                                <tr>
+                                    <td>-</td>
+                                    <td><strong>Sign.</strong></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
+                                    <td class="input-cell"><input type="text" class="veh-sign"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1424,30 +1691,221 @@
                     </div>
 
                     <div class="table-container">
-                        <table class="qa-table" id="hyg-table">
+                        <table class="excel-table" id="hyg-table">
                             <thead>
                                 <tr>
-                                    <th>Action</th>
-                                    <th>Sr No.</th>
-                                    <th>Employee Name</th>
-                                    <th>No Fever/Cough?</th>
-                                    <th>No Running Nose?</th>
-                                    <th>Clean Mask/Cloth?</th>
-                                    <th>Clean Hair Cap?</th>
-                                    <th>Nails/Beard Trimmed?</th>
-                                    <th>No Open Wounds?</th>
-                                    <th>No Chewing/Smoking?</th>
-                                    <th>No Flowers/Perfume?</th>
-                                    <th>No Jewellery?</th>
+                                    <th style="width: 5%;">Sr.</th>
+                                    <th style="width: 25%;">Employee Name</th>
+                                    <th style="width: 7%;">No Fever/ Cough?</th>
+                                    <th style="width: 7%;">No Running Nose?</th>
+                                    <th style="width: 7%;">Clean Mask/ Cloth?</th>
+                                    <th style="width: 7%;">Clean Hair Cap?</th>
+                                    <th style="width: 7%;">Nails/ Beard Trimmed?</th>
+                                    <th style="width: 7%;">No Open Wounds?</th>
+                                    <th style="width: 7%;">No Chewing/ Smoking?</th>
+                                    <th style="width: 7%;">No Flowers/ Perfume?</th>
+                                    <th style="width: 7%;">No Jewellery?</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Dynamic Employee Rows -->
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">1</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Ramesh Kumar" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">2</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Suresh Patil" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">3</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Anil Shinde" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">4</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Sunil Pawar" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">5</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Amit Mishra" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">6</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Rajesh Sharma" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">7</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Vijay Singh" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">8</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Sanjay Yadav" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">9</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Ajay Gupta" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">10</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Vikas Verma" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">11</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Sandeep Kumar" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">12</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Deepak Maurya" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">13</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Manoj Joshi" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">14</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Sunil Yadav" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: center; font-weight: bold;">15</td>
+                                    <td class="input-cell"><input type="text" class="hyg-name" value="Rohit Shinde" placeholder="Employee Name"></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
+                                    <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <button class="btn btn-secondary" onclick="addHygieneEmployeeRow()">+ Add Employee Entry</button>
-
                     <div class="btn-group">
                         <button class="btn btn-secondary" onclick="switchView('dashboard')">Cancel</button>
                         <button class="btn btn-secondary" onclick="saveActiveReport('hygiene', 'Draft')">Save as Draft</button>

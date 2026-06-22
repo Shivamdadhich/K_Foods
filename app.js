@@ -178,10 +178,8 @@ function resetFormById(type) {
     } else if (type === 'dispatch') {
         initDispatchTable();
     } else if (type === 'vehicle') {
-        document.getElementById('veh-no-a').value = '';
-        document.getElementById('veh-dest-a').value = '';
-        document.getElementById('veh-no-b').value = '';
-        document.getElementById('veh-dest-b').value = '';
+        document.querySelectorAll('#veh-table input').forEach(inp => inp.value = '');
+        document.querySelectorAll('#veh-table select').forEach(sel => sel.selectedIndex = 0);
     } else if (type === 'hygiene') {
         initHygieneTable();
     }
@@ -442,36 +440,34 @@ function addLightInspectionRow(timeVal = '') {
     tbody.appendChild(tr);
 }
 
-// 5. WTP Operator / Log Report
+// // 5. WTP Operator / Log Report
 function initWTPTable() {
-    const tbody = document.querySelector('#wtp-table-logs tbody');
-    tbody.innerHTML = '';
-    addWTPLogRow("08:00");
-    addWTPLogRow("12:00");
+    const inputs = document.querySelectorAll('#wtp-table-logs input');
+    inputs.forEach(inp => {
+        if (inp.type === 'time') return; // Keep standard shift hour
+        if (inp.className === 'wtp-src-ph') inp.value = '7.2';
+        else if (inp.className === 'wtp-src-tds') inp.value = '350';
+        else if (inp.className === 'wtp-psf') inp.value = '0.2';
+        else if (inp.className === 'wtp-acf-in') inp.value = '2PPM';
+        else if (inp.className === 'wtp-acf-out') inp.value = 'NIL';
+        else if (inp.className === 'wtp-ro-flow') inp.value = '12';
+        else if (inp.className === 'wtp-ro-ph') inp.value = '7.1';
+        else if (inp.className === 'wtp-ro-tds') inp.value = '110';
+        else if (inp.className === 'wtp-perm-tds') inp.value = '12';
+        else inp.value = '';
+        inp.parentElement.className = 'input-cell';
+    });
+
+    document.getElementById('wtp-chem-1').value = 'Chlorine';
+    document.getElementById('wtp-supplier-1').value = '';
+    document.getElementById('wtp-dates-1').value = '';
+    document.getElementById('wtp-dosing-1').value = '';
+    document.getElementById('wtp-bw-psf').value = '';
+    document.getElementById('wtp-bw-acf').value = '';
 }
 
 function addWTPLogRow(timeVal = '') {
-    if (typeof timeVal !== 'string' || !timeVal.match(/^\d{2}:\d{2}$/)) {
-        timeVal = getCurrentTimeString();
-    }
-    const tbody = document.querySelector('#wtp-table-logs tbody');
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-        <td class="checkbox-cell">
-            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
-        </td>
-        <td class="input-cell"><input type="time" class="wtp-time" value="${timeVal}"></td>
-        <td class="input-cell"><input type="number" step="0.1" class="wtp-src-ph" value="7.2"></td>
-        <td class="input-cell"><input type="number" class="wtp-src-tds" value="350"></td>
-        <td class="input-cell"><input type="number" step="0.1" class="wtp-psf" value="0.2" oninput="validateWTP(this, 1.0)"></td>
-        <td class="input-cell"><input type="text" class="wtp-acf-in" value="2PPM"></td>
-        <td class="input-cell"><input type="text" class="wtp-acf-out" value="NIL"></td>
-        <td class="input-cell"><input type="number" class="wtp-ro-flow" value="12"></td>
-        <td class="input-cell"><input type="number" step="0.1" class="wtp-ro-ph" value="7.1"></td>
-        <td class="input-cell"><input type="number" class="wtp-ro-tds" value="110"></td>
-        <td class="input-cell"><input type="number" class="wtp-perm-tds" value="12" oninput="validateWTP(this, 20)"></td>
-    `;
-    tbody.appendChild(tr);
+    // Deprecated for static spreadsheet, kept empty to avoid runtime errors
 }
 
 function validateWTP(input, maxVal) {
@@ -543,33 +539,22 @@ function addDispatchRow() {
 
 // 8. Hygiene
 function initHygieneTable() {
-    const tbody = document.querySelector('#hyg-table tbody');
-    tbody.innerHTML = '';
-    const initialStaff = ["Ramesh Kumar", "Suresh Patil", "Anil Shinde", "Sunil Pawar"];
-    initialStaff.forEach((name, idx) => addHygieneEmployeeRow(name, idx + 1));
+    const defaultNames = ["Ramesh Kumar", "Suresh Patil", "Anil Shinde", "Sunil Pawar", "Amit Mishra", "Rajesh Sharma", "Vijay Singh", "Sanjay Yadav", "Ajay Gupta", "Vikas Verma", "Sandeep Kumar", "Deepak Maurya", "Manoj Joshi", "Sunil Yadav", "Rohit Shinde"];
+    const rows = document.querySelectorAll('#hyg-table tbody tr');
+    rows.forEach((row, idx) => {
+        const nameInput = row.querySelector('.hyg-name');
+        if (nameInput) nameInput.value = defaultNames[idx] || '';
+        
+        row.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+            chk.checked = true;
+        });
+    });
+    const supervisorInput = document.getElementById('hyg-supervisor');
+    if (supervisorInput) supervisorInput.value = '';
 }
 
 function addHygieneEmployeeRow(nameVal = '', index = '') {
-    const tbody = document.querySelector('#hyg-table tbody');
-    const tr = document.createElement('tr');
-    const idx = index || (tbody.children.length + 1);
-    tr.innerHTML = `
-        <td class="checkbox-cell">
-            <button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Delete</button>
-        </td>
-        <td>${idx}</td>
-        <td class="input-cell"><input type="text" class="hyg-name" value="${nameVal}" placeholder="Employee Name"></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-fever" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-nose" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-mask" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-cap" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-trimmed" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-wounds" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-smoking" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-flowers" checked></td>
-        <td class="checkbox-cell"><input type="checkbox" class="hyg-jewell" checked></td>
-    `;
-    tbody.appendChild(tr);
+    // Deprecated for static spreadsheet, kept empty to avoid runtime errors
 }
 
 // Universal Save Flow
@@ -742,32 +727,16 @@ function saveActiveReport(sheetType, status) {
         summary = `Dispatch Log (${status})`;
     }
     else if (sheetType === 'vehicle') {
-        payload = {
-            vehNoA: document.getElementById('veh-no-a').value,
-            vehNoB: document.getElementById('veh-no-b').value,
-            vehNoC: document.getElementById('veh-no-c').value,
-            vehNoD: document.getElementById('veh-no-d').value,
-            destA: document.getElementById('veh-dest-a').value,
-            destB: document.getElementById('veh-dest-b').value,
-            destC: document.getElementById('veh-dest-c').value,
-            destD: document.getElementById('veh-dest-d').value,
-            cleanA: document.getElementById('veh-clean-a').value,
-            cleanB: document.getElementById('veh-clean-b').value,
-            cleanC: document.getElementById('veh-clean-c').value,
-            cleanD: document.getElementById('veh-clean-d').value,
-            odourA: document.getElementById('veh-odour-a').value,
-            odourB: document.getElementById('veh-odour-b').value,
-            odourC: document.getElementById('veh-odour-c').value,
-            odourD: document.getElementById('veh-odour-d').value,
-            tarpA: document.getElementById('veh-tarp-a').value,
-            tarpB: document.getElementById('veh-tarp-b').value,
-            tarpC: document.getElementById('veh-tarp-c').value,
-            tarpD: document.getElementById('veh-tarp-d').value,
-            remA: document.getElementById('veh-rem-a').value,
-            remB: document.getElementById('veh-rem-b').value,
-            remC: document.getElementById('veh-rem-c').value,
-            remD: document.getElementById('veh-rem-d').value
-        };
+        const nos = Array.from(document.querySelectorAll('.veh-no')).map(el => el.value);
+        const dests = Array.from(document.querySelectorAll('.veh-dest')).map(el => el.value);
+        const cleans = Array.from(document.querySelectorAll('.veh-clean')).map(el => el.value);
+        const odours = Array.from(document.querySelectorAll('.veh-odour')).map(el => el.value);
+        const tarps = Array.from(document.querySelectorAll('.veh-tarp')).map(el => el.value);
+        const remarks = Array.from(document.querySelectorAll('.veh-remark')).map(el => el.value);
+        const inspectedBys = Array.from(document.querySelectorAll('.veh-inspected-by')).map(el => el.value);
+        const signs = Array.from(document.querySelectorAll('.veh-sign')).map(el => el.value);
+        
+        payload = { nos, dests, cleans, odours, tarps, remarks, inspectedBys, signs };
         summary = `Vehicle GMP Inspection (${status})`;
     }
     else if (sheetType === 'hygiene') {
@@ -957,21 +926,35 @@ function loadSavedLogIntoForm(log) {
     else if (log.type === 'wtp') {
         document.getElementById('wtp-operator').value = p.operator || '';
         document.getElementById('wtp-chemist').value = p.chemist || '';
-        const tbody = document.querySelector('#wtp-table-logs tbody');
-        tbody.innerHTML = '';
-        p.times.forEach((t, idx) => {
-            addWTPLogRow(t);
-            const rows = tbody.querySelectorAll('tr');
-            const latestRow = rows[rows.length - 1];
-            latestRow.querySelector('.wtp-src-ph').value = p.srcPhs[idx] || '';
-            latestRow.querySelector('.wtp-src-tds').value = p.srcTdss[idx] || '';
-            latestRow.querySelector('.wtp-psf').value = p.psfs[idx] || '';
-            latestRow.querySelector('.wtp-acf-in').value = p.acfIns[idx] || '';
-            latestRow.querySelector('.wtp-acf-out').value = p.acfOuts[idx] || '';
-            latestRow.querySelector('.wtp-ro-flow').value = p.roFlows[idx] || '';
-            latestRow.querySelector('.wtp-ro-ph').value = p.roPhs[idx] || '';
-            latestRow.querySelector('.wtp-ro-tds').value = p.roTdss[idx] || '';
-            latestRow.querySelector('.wtp-perm-tds').value = p.permTdss[idx] || '';
+        const rows = document.querySelectorAll('#wtp-table-logs tbody tr');
+        rows.forEach((row, idx) => {
+            if (idx >= p.times.length) {
+                row.querySelector('.wtp-time').value = '';
+                row.querySelector('.wtp-src-ph').value = '';
+                row.querySelector('.wtp-src-tds').value = '';
+                row.querySelector('.wtp-psf').value = '';
+                row.querySelector('.wtp-acf-in').value = '';
+                row.querySelector('.wtp-acf-out').value = '';
+                row.querySelector('.wtp-ro-flow').value = '';
+                row.querySelector('.wtp-ro-ph').value = '';
+                row.querySelector('.wtp-ro-tds').value = '';
+                row.querySelector('.wtp-perm-tds').value = '';
+                row.querySelector('.wtp-psf').parentElement.className = 'input-cell';
+                row.querySelector('.wtp-perm-tds').parentElement.className = 'input-cell';
+                return;
+            }
+            row.querySelector('.wtp-time').value = p.times[idx] || '';
+            row.querySelector('.wtp-src-ph').value = p.srcPhs[idx] || '';
+            row.querySelector('.wtp-src-tds').value = p.srcTdss[idx] || '';
+            row.querySelector('.wtp-psf').value = p.psfs[idx] || '';
+            row.querySelector('.wtp-acf-in').value = p.acfIns[idx] || '';
+            row.querySelector('.wtp-acf-out').value = p.acfOuts[idx] || '';
+            row.querySelector('.wtp-ro-flow').value = p.roFlows[idx] || '';
+            row.querySelector('.wtp-ro-ph').value = p.roPhs[idx] || '';
+            row.querySelector('.wtp-ro-tds').value = p.roTdss[idx] || '';
+            row.querySelector('.wtp-perm-tds').value = p.permTdss[idx] || '';
+            validateWTP(row.querySelector('.wtp-psf'), 1.0);
+            validateWTP(row.querySelector('.wtp-perm-tds'), 20);
         });
         if (p.dosing) {
             document.getElementById('wtp-chem-1').value = p.dosing.chem || '';
@@ -1013,48 +996,55 @@ function loadSavedLogIntoForm(log) {
         });
     }
     else if (log.type === 'vehicle') {
-        document.getElementById('veh-no-a').value = p.vehNoA || '';
-        document.getElementById('veh-no-b').value = p.vehNoB || '';
-        document.getElementById('veh-no-c').value = p.vehNoC || '';
-        document.getElementById('veh-no-d').value = p.vehNoD || '';
-        document.getElementById('veh-dest-a').value = p.destA || '';
-        document.getElementById('veh-dest-b').value = p.destB || '';
-        document.getElementById('veh-dest-c').value = p.destC || '';
-        document.getElementById('veh-dest-d').value = p.destD || '';
-        document.getElementById('veh-clean-a').value = p.cleanA || 'Yes';
-        document.getElementById('veh-clean-b').value = p.cleanB || 'Yes';
-        document.getElementById('veh-clean-c').value = p.cleanC || 'Yes';
-        document.getElementById('veh-clean-d').value = p.cleanD || 'Yes';
-        document.getElementById('veh-odour-a').value = p.odourA || 'Yes';
-        document.getElementById('veh-odour-b').value = p.odourB || 'Yes';
-        document.getElementById('veh-odour-c').value = p.odourC || 'Yes';
-        document.getElementById('veh-odour-d').value = p.odourD || 'Yes';
-        document.getElementById('veh-tarp-a').value = p.tarpA || 'Yes';
-        document.getElementById('veh-tarp-b').value = p.tarpB || 'Yes';
-        document.getElementById('veh-tarp-c').value = p.tarpC || 'Yes';
-        document.getElementById('veh-tarp-d').value = p.tarpD || 'Yes';
-        document.getElementById('veh-rem-a').value = p.remA || '';
-        document.getElementById('veh-rem-b').value = p.remB || '';
-        document.getElementById('veh-rem-c').value = p.remC || '';
-        document.getElementById('veh-rem-d').value = p.remD || '';
+        const nos = document.querySelectorAll('.veh-no');
+        const dests = document.querySelectorAll('.veh-dest');
+        const cleans = document.querySelectorAll('.veh-clean');
+        const odours = document.querySelectorAll('.veh-odour');
+        const tarps = document.querySelectorAll('.veh-tarp');
+        const remarks = document.querySelectorAll('.veh-remark');
+        const inspectedBys = document.querySelectorAll('.veh-inspected-by');
+        const signs = document.querySelectorAll('.veh-sign');
+
+        if (p.nos) {
+            p.nos.forEach((n, idx) => {
+                if (nos[idx]) nos[idx].value = n || '';
+                if (dests[idx]) dests[idx].value = p.dests[idx] || '';
+                if (cleans[idx]) cleans[idx].value = p.cleans[idx] || 'Yes';
+                if (odours[idx]) odours[idx].value = p.odours[idx] || 'Yes';
+                if (tarps[idx]) tarps[idx].value = p.tarps[idx] || 'Yes';
+                if (remarks[idx]) remarks[idx].value = p.remarks[idx] || '';
+                if (inspectedBys[idx]) inspectedBys[idx].value = p.inspectedBys[idx] || '';
+                if (signs[idx]) signs[idx].value = p.signs[idx] || '';
+            });
+        }
     }
     else if (log.type === 'hygiene') {
         document.getElementById('hyg-supervisor').value = p.supervisor || '';
-        const tbody = document.querySelector('#hyg-table tbody');
-        tbody.innerHTML = '';
-        p.names.forEach((name, idx) => {
-            addHygieneEmployeeRow(name, idx + 1);
-            const rows = tbody.querySelectorAll('tr');
-            const latestRow = rows[rows.length - 1];
-            latestRow.querySelector('.hyg-fever').checked = p.fevers[idx] !== false;
-            latestRow.querySelector('.hyg-nose').checked = p.noses[idx] !== false;
-            latestRow.querySelector('.hyg-mask').checked = p.masks[idx] !== false;
-            latestRow.querySelector('.hyg-cap').checked = p.caps[idx] !== false;
-            latestRow.querySelector('.hyg-trimmed').checked = p.trimmeds[idx] !== false;
-            latestRow.querySelector('.hyg-wounds').checked = p.wounds[idx] !== false;
-            latestRow.querySelector('.hyg-smoking').checked = p.smokings[idx] !== false;
-            latestRow.querySelector('.hyg-flowers').checked = p.flowers[idx] !== false;
-            latestRow.querySelector('.hyg-jewell').checked = p.jewells[idx] !== false;
+        const rows = document.querySelectorAll('#hyg-table tbody tr');
+        rows.forEach((row, idx) => {
+            if (idx >= p.names.length) {
+                row.querySelector('.hyg-name').value = '';
+                row.querySelector('.hyg-fever').checked = true;
+                row.querySelector('.hyg-nose').checked = true;
+                row.querySelector('.hyg-mask').checked = true;
+                row.querySelector('.hyg-cap').checked = true;
+                row.querySelector('.hyg-trimmed').checked = true;
+                row.querySelector('.hyg-wounds').checked = true;
+                row.querySelector('.hyg-smoking').checked = true;
+                row.querySelector('.hyg-flowers').checked = true;
+                row.querySelector('.hyg-jewell').checked = true;
+                return;
+            }
+            row.querySelector('.hyg-name').value = p.names[idx] || '';
+            row.querySelector('.hyg-fever').checked = p.fevers[idx] !== false;
+            row.querySelector('.hyg-nose').checked = p.noses[idx] !== false;
+            row.querySelector('.hyg-mask').checked = p.masks[idx] !== false;
+            row.querySelector('.hyg-cap').checked = p.caps[idx] !== false;
+            row.querySelector('.hyg-trimmed').checked = p.trimmeds[idx] !== false;
+            row.querySelector('.hyg-wounds').checked = p.wounds[idx] !== false;
+            row.querySelector('.hyg-smoking').checked = p.smokings[idx] !== false;
+            row.querySelector('.hyg-flowers').checked = p.flowers[idx] !== false;
+            row.querySelector('.hyg-jewell').checked = p.jewells[idx] !== false;
         });
     }
 }
@@ -1396,6 +1386,165 @@ function generateConsolidatedReport() {
                             <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.wast2}</td>
                             <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: right;">${p.rec2}</td>
                         </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        else if (log.type === 'vehicle') {
+            dynamicHtml += `
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; width: 5%;">Sr. No.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; width: 25%;">Checklist Parameter</th>
+                            ${(p.nos || []).map((_, i) => `<th style="border: 1px solid #cbd5e1; padding: 4px;">Veh ${i+1}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">1</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Vehicle No.</strong></td>
+                            ${(p.nos || []).map(n => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${n || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">2</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Destination</strong></td>
+                            ${(p.dests || []).map(d => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${d || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">3</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Dry, Clean & Hygienic?</strong></td>
+                            ${(p.cleans || []).map(c => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${c || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">4</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Free from obnoxious odour?</strong></td>
+                            ${(p.odours || []).map(o => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${o || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">5</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Has Tarpaulin roof cover?</strong></td>
+                            ${(p.tarps || []).map(t => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${t || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">-</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Remark (if any)</strong></td>
+                            ${(p.remarks || []).map(r => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${r || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">-</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Vehicle Inspected by</strong></td>
+                            ${(p.inspectedBys || []).map(ib => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${ib || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">-</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Sign.</strong></td>
+                            ${(p.signs || []).map(s => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${s || '-'}</td>`).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        else if (log.type === 'wtp') {
+            dynamicHtml += `
+                <p><strong>WTP Operator:</strong> ${p.operator || '-'} | <strong>Line Chemist:</strong> ${p.chemist || '-'}</p>
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Source Water & RO Filtration Logs</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 5%;">Sr.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 10%;">Time</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 10%;">Source pH</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 9%;">Source TDS</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 11%;">PSF Turbidity</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 9%;">ACF Inlet</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 9%;">ACF Outlet</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 9%;">RO Flow</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 9%;">RO Feed pH</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 9%;">RO Feed TDS</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 11%;">RO Perm TDS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(p.times || []).map((t, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center; font-weight: bold;">${idx + 1}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${t || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.srcPhs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.srcTdss[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.psfs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.acfIns[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.acfOuts[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.roFlows[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.roPhs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.roTdss[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.permTdss[idx] || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+                
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Back Wash & Chemical Dosing Activities</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.75rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Chemical Used</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Supplier Name</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Mfg/Exp Date</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Dosing Rate</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Backwash PSF</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px;">Backwash ACF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${(p.dosing && p.dosing.chem) || 'Chlorine'}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${(p.dosing && p.dosing.supplier) || '-'}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${(p.dosing && p.dosing.dates) || '-'}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${(p.dosing && p.dosing.dosing) || '-'}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${(p.dosing && p.dosing.bwPsf) || '-'}</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${(p.dosing && p.dosing.bwAcf) || '-'}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        else if (log.type === 'hygiene') {
+            dynamicHtml += `
+                <p><strong>Supervisor Signature:</strong> ${p.supervisor || '-'}</p>
+                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Employee Hygiene Checklist Logs</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center; width: 5%;">Sr.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; width: 25%;">Employee Name</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Fever?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Nose?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Mask?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Cap?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Trimmed?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Wounds?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Smoking?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Flowers?</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">Jewell?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(p.names || []).map((name, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center; font-weight: bold;">${idx + 1}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px;">${name || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.fevers[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.noses[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.masks[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.caps[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.trimmeds[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.wounds[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.smokings[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.flowers[idx] ? 'OK' : 'No'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.jewells[idx] ? 'OK' : 'No'}</td>
+                            </tr>
+                        `).join('')}
                     </tbody>
                 </table>
             `;
