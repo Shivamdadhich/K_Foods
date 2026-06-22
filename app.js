@@ -789,8 +789,9 @@ function saveActiveReport(sheetType, status) {
 
     localStorage.setItem('kf_qa_logs', JSON.stringify(db.logs));
     updateDashboardStats();
+    renderArchives();
     
-    switchView('dashboard');
+    switchView('archives');
 }
 
 // Load draft data back into DOM
