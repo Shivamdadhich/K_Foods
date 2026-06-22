@@ -445,34 +445,51 @@ body {
 /* Excel Style Static Tables */
 .excel-table {
     border: 2px solid #334155 !important;
+    table-layout: fixed !important;
+    width: 100% !important;
 }
 .excel-table th {
     background-color: #f1f5f9 !important;
     color: #1e293b !important;
     border: 1px solid #94a3b8 !important;
-    font-size: 0.72rem !important;
+    font-size: 0.65rem !important;
     font-weight: 700 !important;
     text-align: center !important;
-    padding: 0.35rem 0.5rem !important;
+    padding: 0.2rem 0.25rem !important;
     white-space: normal !important;
     vertical-align: middle !important;
+    line-height: 1.1 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 .excel-table td {
     border: 1px solid #cbd5e1 !important;
-    padding: 0.2rem 0.3rem !important;
-    font-size: 0.75rem !important;
+    padding: 0.1rem !important;
+    font-size: 0.7rem !important;
+    overflow: hidden !important;
 }
 .excel-table .input-cell input, .excel-table .input-cell select {
-    padding: 0.25rem 0.35rem !important;
-    font-size: 0.75rem !important;
+    padding: 0.15rem 0.2rem !important;
+    font-size: 0.7rem !important;
     text-align: center !important;
     border-radius: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 .excel-table .input-cell input[type="number"] {
     text-align: center !important;
+    -moz-appearance: textfield !important;
+}
+.excel-table .input-cell input[type="number"]::-webkit-outer-spin-button,
+.excel-table .input-cell input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
 }
 .excel-table select {
-    appearance: auto !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    background: transparent !important;
+    text-align-last: center !important;
 }
 .bottom-layout-grid h4 {
     margin-bottom: 0.5rem;
