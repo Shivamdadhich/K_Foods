@@ -1383,21 +1383,177 @@ function generateConsolidatedReport() {
             `;
         }
         else if (log.type === 'vehicle') {
+            const safeNos = p.nos && p.nos.length ? p.nos : Array(10).fill('');
+            const safeDests = p.dests && p.dests.length ? p.dests : Array(10).fill('');
+            const safeCleans = p.cleans && p.cleans.length ? p.cleans : Array(10).fill('Yes');
+            const safeOdours = p.odours && p.odours.length ? p.odours : Array(10).fill('Yes');
+            const safeTarps = p.tarps && p.tarps.length ? p.tarps : Array(10).fill('Yes');
+            const safeRemarks = p.remarks && p.remarks.length ? p.remarks : Array(10).fill('');
+            const safeInspectedBys = p.inspectedBys && p.inspectedBys.length ? p.inspectedBys : Array(10).fill('');
+            const safeSigns = p.signs && p.signs.length ? p.signs : Array(10).fill('');
+
             dynamicHtml += `
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; margin-top: 0.5rem;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.6rem; margin-top: 0.5rem;">
                     <thead>
                         <tr style="background: #f8fafc;">
                             <th style="border: 1px solid #cbd5e1; padding: 4px; width: 5%;">Sr. No.</th>
                             <th style="border: 1px solid #cbd5e1; padding: 4px; width: 25%;">Checklist Parameter</th>
-                            ${(p.nos || []).map((_, i) => `<th style="border: 1px solid #cbd5e1; padding: 4px;">Veh ${i+1}</th>`).join('')}
+                            ${safeNos.map((_, i) => `<th style="border: 1px solid #cbd5e1; padding: 4px;">Veh ${i+1}</th>`).join('')}
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">1</td>
                             <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Vehicle No.</strong></td>
-                            ${(p.nos || []).map(n => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${n || '-'}</td>`).join('')}
+                            ${safeNos.map(n => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${n || '-'}</td>`).join('')}
                         </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">2</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Destination</strong></td>
+                            ${safeDests.map(d => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${d || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">3</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Dry, Clean & Hygienic?</strong></td>
+                            ${safeCleans.map(c => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${c || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">4</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Free from obnoxious odour?</strong></td>
+                            ${safeOdours.map(o => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${o || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">5</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Has Tarpaulin roof cover?</strong></td>
+                            ${safeTarps.map(t => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${t || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">-</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Remark (if any)</strong></td>
+                            ${safeRemarks.map(r => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${r || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">-</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Vehicle Inspected by</strong></td>
+                            ${safeInspectedBys.map(ib => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${ib || '-'}</td>`).join('')}
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">-</td>
+                            <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Sign.</strong></td>
+                            ${safeSigns.map(s => `<td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${s || '-'}</td>`).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+        }
+        else if (log.type === 'release') {
+            dynamicHtml += `
+                <p><strong>Goods Release Auth to:</strong> ${p.target || '-'}</p>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 5%;">Sr.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 12%;">Pack Size</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 12%;">Lot Size</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 12%;">Appearance</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 12%;">Taste</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 8%;">pH</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 8%;">TDS</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 10%;">TBC</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 10%;">Y&M</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 11%;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(p.packSizes || []).map((ps, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-weight: bold;">${idx + 1}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${ps || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.lotSizes[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.apps[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.tastes[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.phs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.tdss[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.tbcs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.yms[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-weight: bold;">${p.statuses[idx] || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        else if (log.type === 'light') {
+            dynamicHtml += `
+                <p><strong>Pack Size:</strong> ${p.pack || '-'} | <strong>Shift:</strong> ${p.shift || '-'}</p>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 5%;">Sr.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 10%;">Time</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Foreign Matter</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Cross Threading</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Loose Cap</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Open Cap</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Low Fill</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Leakage</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">Milky Bottle</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 15%;">Inspector</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 15%;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(p.times || []).map((t, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-weight: bold;">${idx + 1}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${t || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.foreigns[idx] || 0}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.crosses[idx] || 0}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.looses[idx] || 0}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.opens[idx] || 0}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.lows[idx] || 0}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.leaks[idx] || 0}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.milks[idx] || 0}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.inspectors[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.remarks[idx] || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        else if (log.type === 'dispatch') {
+            dynamicHtml += `
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.5rem;">
+                    <thead>
+                        <tr style="background: #f8fafc;">
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 5%;">Sr.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 25%;">Distributor Name</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 15%;">Location</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 10%;">SKU</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 10%;">Qty (Cases)</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 12%;">Batch/Lot No.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 11%;">Vehicle No.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; width: 12%;">Dispatched By</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${(p.names || []).map((name, idx) => `
+                            <tr>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center; font-weight: bold;">${idx + 1}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${name || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.locs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.skus[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.qtys[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.batches[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.vehs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">${p.bys[idx] || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
                         <tr>
                             <td style="border: 1px solid #cbd5e1; padding: 4px; text-align: center;">2</td>
                             <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Destination</strong></td>
