@@ -42,6 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('app-main-layout').style.display = 'none';
     }
 
+    if (localStorage.getItem('kf_sidebar_collapsed') === 'true') {
+        document.body.classList.add('sidebar-collapsed');
+    }
+
     resetAllForms();
     updateDashboardStats();
     initChart();
@@ -55,6 +59,11 @@ function showLoginModal() {
 
 function hideLoginModal() {
     document.getElementById('login-modal').classList.remove('active');
+}
+
+function toggleSidebar() {
+    const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
+    localStorage.setItem('kf_sidebar_collapsed', isCollapsed ? 'true' : 'false');
 }
 
 function attemptLogin() {
