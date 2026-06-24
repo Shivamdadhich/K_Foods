@@ -1116,8 +1116,15 @@ function printSavedLog(id) {
     document.getElementById('global-working-date').value = log.date;
     loadSavedLogIntoForm(log);
     switchView(log.type);
+    
+    const originalTitle = document.title;
+    document.title = `${log.type.toUpperCase()}_${log.date}`;
+    
     setTimeout(() => {
         window.print();
+        setTimeout(() => {
+            document.title = originalTitle;
+        }, 1000);
     }, 300);
 }
 
@@ -1709,11 +1716,26 @@ function generateConsolidatedReport() {
     printLayout.innerHTML = dynamicHtml;
 
     document.body.classList.add('print-range-active');
+    
+    // Set dynamic document title for pdf file name output
+    const originalTitle = document.title;
+    let fileDateStr = start;
+    if (start !== end) {
+        fileDateStr = `${start}_to_${end}`;
+    }
+    
+    if (type === 'all') {
+        document.title = `CONSOLIDATED_${fileDateStr}`;
+    } else {
+        document.title = `${type.toUpperCase()}_${fileDateStr}`;
+    }
+
     window.print();
 
     setTimeout(() => {
         printLayout.innerHTML = '';
         document.body.classList.remove('print-range-active');
+        document.title = originalTitle;
     }, 1000);
 }
 
