@@ -1149,18 +1149,36 @@ function generateConsolidatedReport() {
     }
 
     const printLayout = document.getElementById('consolidated-print-layout');
-    let dynamicHtml = `
-        <div style="font-family: Arial, sans-serif; padding: 0.5rem 1.5rem;">
-            <h1 style="text-align: center; color: #0f172a; margin-bottom: 0.1rem; margin-top: 0.1rem; font-size: 1.6rem;">K FOODS N BEVERAGES, CHIMBALI</h1>
-            <h3 style="text-align: center; color: #475569; margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem;">Consolidated Quality Report Book</h3>
-            <p style="text-align: center; font-size: 0.8rem; margin-bottom: 0.5rem;"><strong>Reporting Range:</strong> ${start} to ${end}</p>
-            <hr style="margin-bottom: 1rem; border: 1px solid #cbd5e1;">
-    `;
+    let dynamicHtml = '';
+    
+    // Only show the consolidated title/cover header if 'All Sheets Consolidated' (type === 'all') is selected
+    if (type === 'all') {
+        dynamicHtml += `
+            <div style="font-family: Arial, sans-serif; padding: 0.5rem 1.5rem;">
+                <h1 style="text-align: center; color: #0f172a; margin-bottom: 0.1rem; margin-top: 0.1rem; font-size: 1.6rem;">K FOODS N BEVERAGES, CHIMBALI</h1>
+                <h3 style="text-align: center; color: #475569; margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem;">Consolidated Quality Report Book</h3>
+                <p style="text-align: center; font-size: 0.8rem; margin-bottom: 0.5rem;"><strong>Reporting Range:</strong> ${start} to ${end}</p>
+                <hr style="margin-bottom: 1rem; border: 1px solid #cbd5e1;">
+        `;
+    } else {
+        dynamicHtml += `<div style="font-family: Arial, sans-serif; padding: 0.5rem 1.5rem;">`;
+    }
 
     logs.forEach((log, index) => {
         const p = log.payload;
-        // If it's a finishedproduct log (which has multiple large tables), we want to start it on a fresh page so it fits completely on one page
-        const pageBreakStyle = (index === 0 && log.type !== 'finishedproduct') ? '' : 'page-break-before: always;';
+        // Determine page break behavior:
+        // 1. If single report (type !== 'all'), the first one (index === 0) should never have a page break.
+        // 2. If consolidated (type === 'all'):
+        //    - If first report is finishedproduct, push it to page 2 (so page-break-before applies).
+        //    - Otherwise first one doesn't break.
+        // 3. For any subsequent pages (index > 0), always start on a fresh page.
+        let pageBreakStyle = '';
+        if (index > 0) {
+            pageBreakStyle = 'page-break-before: always;';
+        } else if (type === 'all' && log.type === 'finishedproduct') {
+            pageBreakStyle = 'page-break-before: always;';
+        }
+
         dynamicHtml += `
             <div style="${pageBreakStyle} margin-bottom: 1.5rem;">
                 <h3 style="background: #f1f5f9; padding: 0.4rem; border-left: 5px solid var(--primary); margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1rem;">
