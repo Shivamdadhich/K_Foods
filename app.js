@@ -1159,8 +1159,8 @@ function generateConsolidatedReport() {
 
     logs.forEach((log, index) => {
         const p = log.payload;
-        // If it's the very first page and it's a finishedproduct report, or if we want clean separations
-        const pageBreakStyle = index === 0 ? '' : 'page-break-before: always;';
+        // If it's a finishedproduct log (which has multiple large tables), we want to start it on a fresh page so it fits completely on one page
+        const pageBreakStyle = (index === 0 && log.type !== 'finishedproduct') ? '' : 'page-break-before: always;';
         dynamicHtml += `
             <div style="${pageBreakStyle} margin-bottom: 1.5rem;">
                 <h3 style="background: #f1f5f9; padding: 0.4rem; border-left: 5px solid var(--primary); margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1rem;">
