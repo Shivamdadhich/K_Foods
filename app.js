@@ -1195,67 +1195,67 @@ function generateConsolidatedReport() {
         } 
         else if (log.type === 'finishedproduct') {
             dynamicHtml += `
-                <p><strong>Pack Size:</strong> ${p.packSize} | <strong>Line Chemist:</strong> ${p.chemist}</p>
-                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Online Quality Parameters (Finished Product)</h5>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                <p style="margin-top: 0.1rem; margin-bottom: 0.1rem; font-size: 0.75rem;"><strong>Pack Size:</strong> ${p.packSize} | <strong>Line Chemist:</strong> ${p.chemist}</p>
+                <h5 style="margin-top: 0.2rem; margin-bottom: 0.1rem; font-size: 0.8rem;">Online Quality Parameters (Finished Product)</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.6rem; margin-top: 0.1rem; margin-bottom: 0.4rem;">
                     <thead>
                         <tr style="background: #f8fafc;">
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Time</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Oz Oz</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Oz Prod</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">App</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Odour</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Taste</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">pH</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">TDS</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Hard</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Ca</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Mg</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Col</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Fin</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Alk</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Chl</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Sul</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">RFC</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Net</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Coding</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Align</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Wrink</th>
-                            <th style="border: 1px solid #cbd5e1; padding: 3px;">Glue</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Time</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Oz Oz</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Oz Prod</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">App</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Odour</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Taste</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">pH</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">TDS</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Hard</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Ca</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Mg</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Col</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Fin</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Alk</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Chl</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Sul</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">RFC</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Net</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Coding</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Align</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Wrink</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 2px;">Glue</th>
                         </tr>
                     </thead>
                     <tbody>
                         ${p.times.map((t, idx) => `
                             <tr>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${t}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.ozoneOz[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.ozoneProd[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.appearances[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.odours[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.tastes[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.ph[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.tds[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.hardness[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.calciums[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.magnesiums[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.colors[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.finprods[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.alkalinities[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.chlorides[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.sulphates[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.rfcs[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.netContents[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.codings[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.cableAligns[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.labelWrinkles[idx] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 3px; text-align: center;">${p.glueStatuses[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${t}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.ozoneOz[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.ozoneProd[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.appearances[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.odours[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.tastes[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.ph[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.tds[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.hardness[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.calciums[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.magnesiums[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.colors[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.finprods[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.alkalinities[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.chlorides[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.sulphates[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.rfcs[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.netContents[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.codings[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.cableAligns[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.labelWrinkles[idx] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px; text-align: center;">${p.glueStatuses[idx] || '-'}</td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
 
-                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Jar Washing & Sanitation Logs</h5>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.55rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                <h5 style="margin-top: 0.3rem; margin-bottom: 0.1rem; font-size: 0.8rem;">Jar Washing & Sanitation Logs</h5>
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.52rem; margin-top: 0.1rem; margin-bottom: 0.4rem;">
                     <thead>
                         <tr style="background: #f8fafc;">
                             <th rowspan="2" style="border: 1px solid #cbd5e1; padding: 2px;">Time</th>
@@ -1326,34 +1326,34 @@ function generateConsolidatedReport() {
 
             if (p.closureSuppliers) {
                 dynamicHtml += `
-                    <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Closure / Material Details</h5>
-                    <table style="width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-top: 0.2rem; margin-bottom: 1rem;">
+                    <h5 style="margin-top: 0.3rem; margin-bottom: 0.1rem; font-size: 0.8rem;">Closure / Material Details</h5>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.65rem; margin-top: 0.1rem; margin-bottom: 0.4rem;">
                         <thead>
                             <tr style="background: #f8fafc;">
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Material</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Supplier</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Mfg Date</th>
-                                <th style="border: 1px solid #cbd5e1; padding: 4px;">Lot No.</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 2px;">Material</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 2px;">Supplier</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 2px;">Mfg Date</th>
+                                <th style="border: 1px solid #cbd5e1; padding: 2px;">Lot No.</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Closure</strong></td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureSuppliers[0] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureMfgDates[0] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureLots[0] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;"><strong>Closure</strong></td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureSuppliers[0] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureMfgDates[0] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureLots[0] || '-'}</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Jar</strong></td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureSuppliers[1] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureMfgDates[1] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureLots[1] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;"><strong>Jar</strong></td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureSuppliers[1] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureMfgDates[1] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureLots[1] || '-'}</td>
                             </tr>
                             <tr>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;"><strong>Shrink Film</strong></td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureSuppliers[2] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureMfgDates[2] || '-'}</td>
-                                <td style="border: 1px solid #cbd5e1; padding: 4px;">${p.closureLots[2] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;"><strong>Shrink Film</strong></td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureSuppliers[2] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureMfgDates[2] || '-'}</td>
+                                <td style="border: 1px solid #cbd5e1; padding: 2px;">${p.closureLots[2] || '-'}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1361,8 +1361,8 @@ function generateConsolidatedReport() {
             }
 
             dynamicHtml += `
-                <h5 style="margin-top: 0.5rem; margin-bottom: 0.2rem;">Start-up Safety Activities</h5>
-                <p style="font-size: 0.75rem; margin-top: 0.2rem;">
+                <h5 style="margin-top: 0.3rem; margin-bottom: 0.1rem; font-size: 0.8rem;">Start-up Safety Activities</h5>
+                <p style="font-size: 0.7rem; margin-top: 0.1rem; margin-bottom: 0.1rem;">
                     Washer Tank: <strong>${p.safetyTank ? 'CLEANED' : 'NOT CLEANED'}</strong> | 
                     Jet Nozzles: <strong>${p.safetyNozzles ? 'CLEANED' : 'NOT CLEANED'}</strong> | 
                     Capper Hopper: <strong>${p.safetyHopper ? 'CLEANED' : 'NOT CLEANED'}</strong> | 
