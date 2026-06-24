@@ -1150,18 +1150,20 @@ function generateConsolidatedReport() {
 
     const printLayout = document.getElementById('consolidated-print-layout');
     let dynamicHtml = `
-        <div style="font-family: Arial, sans-serif; padding: 1.5rem;">
-            <h1 style="text-align: center; color: #0f172a; margin-bottom: 0.25rem;">K FOODS N BEVERAGES, CHIMBALI</h1>
-            <h3 style="text-align: center; color: #475569; margin-top: 0; margin-bottom: 2rem;">Consolidated Quality Report Book</h3>
-            <p style="text-align: center; font-size: 0.9rem;"><strong>Reporting Range:</strong> ${start} to ${end}</p>
-            <hr style="margin-bottom: 2rem; border: 1px solid #cbd5e1;">
+        <div style="font-family: Arial, sans-serif; padding: 0.5rem 1.5rem;">
+            <h1 style="text-align: center; color: #0f172a; margin-bottom: 0.1rem; margin-top: 0.1rem; font-size: 1.6rem;">K FOODS N BEVERAGES, CHIMBALI</h1>
+            <h3 style="text-align: center; color: #475569; margin-top: 0; margin-bottom: 0.5rem; font-size: 1.1rem;">Consolidated Quality Report Book</h3>
+            <p style="text-align: center; font-size: 0.8rem; margin-bottom: 0.5rem;"><strong>Reporting Range:</strong> ${start} to ${end}</p>
+            <hr style="margin-bottom: 1rem; border: 1px solid #cbd5e1;">
     `;
 
-    logs.forEach(log => {
+    logs.forEach((log, index) => {
         const p = log.payload;
+        // If it's the very first page and it's a finishedproduct report, or if we want clean separations
+        const pageBreakStyle = index === 0 ? '' : 'page-break-before: always;';
         dynamicHtml += `
-            <div style="page-break-after: always; margin-bottom: 3rem;">
-                <h3 style="background: #f1f5f9; padding: 0.5rem; border-left: 5px solid var(--primary);">
+            <div style="${pageBreakStyle} margin-bottom: 1.5rem;">
+                <h3 style="background: #f1f5f9; padding: 0.4rem; border-left: 5px solid var(--primary); margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 1rem;">
                     Date: ${log.date} - ${log.type.toUpperCase()} (${log.status || 'Final'})
                 </h3>
         `;
